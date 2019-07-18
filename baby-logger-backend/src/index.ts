@@ -11,5 +11,4 @@ const server = new GraphQLServer({
     prisma,
   }),
 })
-console.log("secret")
 server.start(() => console.log(`Server is running on http://localhost:4000`))
