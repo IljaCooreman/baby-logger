@@ -1,0 +1,28 @@
+type User {
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  name: String!
+  babies: [Baby!]!
+}
+
+type Baby {
+  id: ID! @id
+  name: String!
+  napEvents: [NapEvent!]!
+  parent: User!
+}
+
+enum Status {
+  COMPLETE
+  ONGOING
+  INCOMPLETE
+}
+
+type NapEvent {
+  id: ID! @id
+  start: String!
+  end: String
+  status: Status!
+  baby: Baby!
+}
