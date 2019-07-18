@@ -1,4 +1,4 @@
-import { Baby } from './baby';
+import { Baby } from './Baby';
 import { auth } from './Mutation/auth';
 import { napEvents } from './Mutation/napEvents';
 import { NapEvent } from './NapEvent';

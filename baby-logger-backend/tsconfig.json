@@ -6,8 +6,10 @@
     "sourceMap": true,
     "rootDir": "src",
     "outDir": "dist",
+    "skipLibCheck": true,
     "lib": [
-      "esnext", "dom"
+      "esnext",
+      "dom"
     ]
   }
 }

@@ -1,3 +1,12 @@
+How to push to ACR:
+
+`az acr login --name logger.azurecr.io/logger`
+`docker push logger.azurecr.io/logger`
+
+endpoint hosted at `https://logger-backend.azurewebsites.net/`
+
+
+
 <h1 align="center"><strong>Boilerplate for an Advanced GraphQL Server w/ TypeScript</strong></h1>
 
 <br />
