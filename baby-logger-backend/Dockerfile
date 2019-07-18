@@ -1,5 +1,8 @@
 FROM node:12.6.0-alpine as backend-build
 
+ARG PRISMA_SECRET
+ENV PRISMA_SECRET ${PRISMA_SECRET}
+
 # our dest
 WORKDIR /app
 

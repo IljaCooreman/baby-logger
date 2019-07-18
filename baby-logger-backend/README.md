@@ -3,7 +3,7 @@ How to push to ACR:
 `az acr login --name logger.azurecr.io/logger`
 `docker push logger.azurecr.io/logger`
 
-endpoint hosted at `https://logger-backend.azurewebsites.net/`
+backend endpoint hosted at `https://logger-backend.azurewebsites.net/`
 
 
 
