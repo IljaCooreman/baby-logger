@@ -7,7 +7,7 @@ export enum Status {
 }
 
 export const napEvents = {
-  async startNap(parent, { babyId, start, end }, ctx: Context) {
+  async startNap(parent, { babyId, start }, ctx: Context) {
     // 0. check whether previous nap is more than x seconds ago (prevent spamming)
     // 1. check if previous nap is ongoing, if so, set it to incomplete
     const ongoingNaps = await ctx.prisma.updateManyNapEvents({
@@ -20,7 +20,7 @@ export const napEvents = {
     const napEvent = await ctx.prisma.createNapEvent({
       baby: { connect: { id: babyId } },
       status: Status.ongoing,
-      start
+      start: start || new Date().toISOString()
     })
     return napEvent
   },
@@ -42,7 +42,7 @@ export const napEvents = {
       where: { id: ongoingNap[0].id },
       data: {
         status: Status.complete,
-        end
+        end: end || new Date().toISOString()
       }
     })
 

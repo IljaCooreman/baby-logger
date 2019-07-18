@@ -4,13 +4,13 @@ const { BABY_ID } = require('./constants')
 const { graphqlRequest } = require('./graphqlRequest');
 
 const startNapQuery = `mutation{
-  startNap(start: "${new Date()}", babyId: "${BABY_ID}") {
+  startNap(babyId: "${BABY_ID}") {
     id
   }
 }`
 
 const endNapQuery = `mutation{
-  endNap(end: "${new Date()}", babyId: "${BABY_ID}") {
+  endNap(babyId: "${BABY_ID}") {
     id
     start
     end
@@ -42,4 +42,7 @@ process.stdin.on('keypress', (str, key) => {
     console.log();
   }
 });
-console.log('Press any key...');
+console.log('#### baby logger ####')
+console.log('Press left arrow key to start a nap');
+console.log('Press right arrow key to end a nap');
+console.log('Awaiting input');
