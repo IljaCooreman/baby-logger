@@ -44,4 +44,5 @@ type NapEvent {
   end: String
   status: Status!
   baby: Baby!
+  duration: Int
 }
