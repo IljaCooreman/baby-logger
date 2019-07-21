@@ -5,30 +5,6 @@ var Gpio = require('onoff').Gpio;
 const led = new Gpio(17, 'out');
 const button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
 
-let napStatus = 0
-let ledBlinkingInterval = []
-
-const ledStartBlinking = () => ledBlinkingInterval.push(setInterval(_ => led.writeSync(led.readSync() ^ 1), 200));
-const ledStopBlinking = () => {
-  ledBlinkingInterval.forEach(intervalId => {
-    clearInterval(intervalId);
-  })
-  ledBlinkingInterval = [];
-}
-
-const onButtonClick = () => {
-  napStatus = napStatus ^ 1;
-  napStatus === 0 || ledBlinkingInterval ? ledStartBlinking() : ledStopBlinking();
-}
-
-button.watch((err, value) => {
-  console.log('value', value);
-  console.log(err)
-  onButtonClick();
-  return led.writeSync(value);
-});
-
-
 const startNapQuery = `mutation{
   startNap(babyId: "${BABY_ID}") {
     id
@@ -43,16 +19,44 @@ const endNapQuery = `mutation{
   }
 }`
 const listEventsQuery = `{
-  napEvents {
+  napEvents(babyId: "${BABY_ID}") {
     id
     start
     end
   }
 }`
 
-const status = `{
-
+const statusQuery = `{
+  napEvents(babyId: "${BABY_ID}", last: 1) {
+    status
+  }
 }`
+
+// const ledStartBlinking = () => ledBlinkingInterval.push(setInterval(_ => led.writeSync(led.readSync() ^ 1), 200));
+// const ledStopBlinking = () => {
+//   ledBlinkingInterval.forEach(intervalId => {
+//     clearInterval(intervalId);
+//   })
+//   console.log(ledBlinkingInterval)
+//   ledBlinkingInterval = [];
+// }
+
+const onButtonClick = async (value) => {
+  if (value === 1) return;
+  const status = await graphqlRequest(statusQuery);
+  const isOngoing = status === "ONGOING";
+
+  await graphqlRequest(isOngoing ? endNapQuery : startNapQuery);
+
+  led.writeSync(isOngoing ? 1 : 0);
+}
+
+button.watch((err, value) => {
+  console.log('value', value);
+  onButtonClick();
+});
+
+
 
 readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true);
