@@ -3,7 +3,7 @@ const { BABY_ID } = require('./constants')
 const { graphqlRequest } = require('./graphqlRequest');
 var Gpio = require('onoff').Gpio;
 const led = new Gpio(17, 'out');
-const button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
+const button = new Gpio(4, 'in', 'both', { debounceTimeout: 2000 });
 
 const startNapQuery = `mutation{
   startNap(babyId: "${BABY_ID}") {
@@ -43,19 +43,17 @@ const statusQuery = `{
 
 const onButtonClick = async (value) => {
   if (value == 1) return;
-  const queryResult = await graphqlRequest(statusQuery)[0];
+  const queryResult = await graphqlRequest(statusQuery);
   if (!queryResult || !queryResult.napEvents || queryResult.napEvents.length !== 1) return;
   const { status } = queryResult.napEvents[0];
   const isOngoing = status === "ONGOING";
   const query = isOngoing ? endNapQuery : startNapQuery
-  console.log('doing query', query, status, typeof status)
   await graphqlRequest(query);
 
   led.writeSync(isOngoing ? 1 : 0);
 }
 
 button.watch(async (err, value) => {
-  console.log('value', value);
   await onButtonClick(value);
 });
 
