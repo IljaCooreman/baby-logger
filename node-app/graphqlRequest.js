@@ -3,5 +3,5 @@ const { ENDPOINT } = require('./constants')
 
 
 module.exports.graphqlRequest = function (query) {
-  return request(ENDPOINT, query).then(data => console.log(data))
+  return request(ENDPOINT, query).then(data => { console.log(data); return data })
 }
