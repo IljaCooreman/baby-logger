@@ -45,7 +45,8 @@ const init = async () => {
   const queryResult = await graphqlRequest(statusQuery);
   if (!queryResult || !queryResult.napEvents || queryResult.napEvents.length !== 1) return;
   const { status } = queryResult.napEvents[0];
-  led.writeSync(status === "ONGOING" ? 1 : 0);
+  const isOngoing = status === "ONGOING";
+  led.writeSync(isOngoing ? 1 : 0);
 }
 init();
 
