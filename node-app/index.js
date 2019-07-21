@@ -6,16 +6,19 @@ const led = new Gpio(17, 'out');
 const button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
 
 let napStatus = 0
-let ledBlinkingInterval = null
+let ledBlinkingInterval = []
 
-const ledStartBlinking = () => setInterval(_ => led.writeSync(led.readSync() ^ 1), 200);
+const ledStartBlinking = () => ledBlinkingInterval.push(setInterval(_ => led.writeSync(led.readSync() ^ 1), 200));
 const ledStopBlinking = () => {
-  clearInterval(ledBlinkingInterval)
+  ledBlinkingInterval.forEach(intervalId => {
+    clearInterval(intervalId);
+  })
+  ledBlinkingInterval = [];
 }
 
 const onButtonClick = () => {
   napStatus = napStatus ^ 1;
-  napStatus === 1 ? ledStartBlinking() : ledStopBlinking();
+  napStatus === 0 || ledBlinkingInterval ? ledStartBlinking() : ledStopBlinking();
 }
 
 button.watch((err, value) => {
