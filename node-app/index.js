@@ -45,8 +45,9 @@ const onButtonClick = async (value) => {
   if (value == 1) return;
   const status = await graphqlRequest(statusQuery);
   const isOngoing = status === "ONGOING";
-
-  await graphqlRequest(isOngoing ? endNapQuery : startNapQuery);
+  const query = isOngoing ? endNapQuery : startNapQuery
+  console.log('doing query', query, status, typeof status)
+  await graphqlRequest(query);
 
   led.writeSync(isOngoing ? 1 : 0);
 }
