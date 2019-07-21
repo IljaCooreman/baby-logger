@@ -1,16 +1,30 @@
 const readline = require('readline');
 const { BABY_ID } = require('./constants')
+const { graphqlRequest } = require('./graphqlRequest');
 var Gpio = require('onoff').Gpio;
 const led = new Gpio(17, 'out');
-const button = new Gpio(4, 'in', 'both');
+const button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
+
+let napStatus = 0
+let ledBlinkingInterval = null
+
+const ledStartBlinking = () => setInterval(_ => led.writeSync(led.readSync() ^ 1), 200);
+const ledStopBlinking = () => {
+  ledBlinkingInterval && clearInterval(ledBlinkingInterval)
+}
+
+const onButtonClick = () => {
+  napStatus === 1 ? ledStartBlinking() : ledStopBlinking()
+  napStatus = napStatus ^ 1;
+}
 
 button.watch((err, value) => {
   console.log('value', value);
   console.log(err)
+  onButtonClick();
   return led.writeSync(value);
 });
 
-const { graphqlRequest } = require('./graphqlRequest');
 
 const startNapQuery = `mutation{
   startNap(babyId: "${BABY_ID}") {
@@ -31,6 +45,10 @@ const listEventsQuery = `{
     start
     end
   }
+}`
+
+const status = `{
+
 }`
 
 readline.emitKeypressEvents(process.stdin);
@@ -55,3 +73,10 @@ console.log('#### baby logger ####')
 console.log('Press left arrow key to start a nap');
 console.log('Press right arrow key to end a nap');
 console.log('Awaiting input');
+
+
+process.on('SIGINT', () => {
+  console.log('exiting gracefully');
+  led.unexport();
+  button.unexport();
+});
