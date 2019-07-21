@@ -48,7 +48,9 @@ const init = async () => {
   const isOngoing = status === "ONGOING";
   led.writeSync(isOngoing ? 1 : 0);
 }
-init();
+setTimeout(() => {
+  init();
+}, 2000)
 
 const onButtonClick = async (value) => {
   if (value == 1) return;
