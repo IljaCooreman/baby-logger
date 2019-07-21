@@ -5,9 +5,9 @@ const led = new Gpio(17, 'out');
 const button = new Gpio(4, 'in', 'both');
 
 button.watch((err, value) => {
-  led.writeSync(value);
   console.log('value', value);
   console.log(err)
+  return led.writeSync(value);
 });
 
 const { graphqlRequest } = require('./graphqlRequest');
