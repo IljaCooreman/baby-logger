@@ -3,7 +3,7 @@ const { BABY_ID } = require('./constants')
 const { graphqlRequest } = require('./graphqlRequest');
 var Gpio = require('onoff').Gpio;
 const led = new Gpio(17, 'out');
-const button = new Gpio(4, 'in', 'both', { debounceTimeout: 2000 });
+const button = new Gpio(4, 'in', 'both', { debounceTimeout: 200 });
 
 const startNapQuery = `mutation{
   startNap(babyId: "${BABY_ID}") {
