@@ -1,10 +1,14 @@
 const readline = require('readline');
 const { BABY_ID } = require('./constants')
 var Gpio = require('onoff').Gpio;
-
+const led = new Gpio(17, 'out');
 const button = new Gpio(4, 'in', 'both');
 
-button.watch((err, value) => { console.log('value', value); console.log(err) });
+button.watch((err, value) => {
+  led.writeSync(value);
+  console.log('value', value);
+  console.log(err)
+});
 
 const { graphqlRequest } = require('./graphqlRequest');
 
