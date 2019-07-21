@@ -41,6 +41,12 @@ const statusQuery = `{
 //   ledBlinkingInterval = [];
 // }
 
+const init = async () => {
+  const queryResult = await graphqlRequest(statusQuery);
+  led.writeSync(status === "ONGOING" ? 1 : 0);
+}
+init();
+
 const onButtonClick = async (value) => {
   if (value == 1) return;
   const queryResult = await graphqlRequest(statusQuery);
