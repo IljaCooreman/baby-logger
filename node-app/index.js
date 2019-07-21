@@ -47,11 +47,12 @@ const init = async () => {
   const { status } = queryResult.napEvents[0];
   const isOngoing = status === "ONGOING";
   console.log(isOngoing)
-  led.writeSync(isOngoing ? 1 : 0);
+  led.writeSync(isOngoing ? 0 : 1);
 }
-setTimeout(() => {
-  init();
-}, 5000)
+
+init();
+
+
 
 const onButtonClick = async (value) => {
   if (value == 1) return;
