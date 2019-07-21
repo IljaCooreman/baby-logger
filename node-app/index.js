@@ -10,12 +10,12 @@ let ledBlinkingInterval = null
 
 const ledStartBlinking = () => setInterval(_ => led.writeSync(led.readSync() ^ 1), 200);
 const ledStopBlinking = () => {
-  ledBlinkingInterval && clearInterval(ledBlinkingInterval)
+  clearInterval(ledBlinkingInterval)
 }
 
 const onButtonClick = () => {
-  napStatus === 1 ? ledStartBlinking() : ledStopBlinking()
   napStatus = napStatus ^ 1;
+  napStatus === 1 ? ledStartBlinking() : ledStopBlinking();
 }
 
 button.watch((err, value) => {
