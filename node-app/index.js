@@ -43,7 +43,7 @@ const statusQuery = `{
 
 const onButtonClick = async (value) => {
   if (value == 1) return;
-  const status = await graphqlRequest(statusQuery);
+  const { status } = await graphqlRequest(statusQuery)[0];
   const isOngoing = status === "ONGOING";
   const query = isOngoing ? endNapQuery : startNapQuery
   console.log('doing query', query, status, typeof status)
@@ -52,9 +52,9 @@ const onButtonClick = async (value) => {
   led.writeSync(isOngoing ? 1 : 0);
 }
 
-button.watch((err, value) => {
+button.watch(async (err, value) => {
   console.log('value', value);
-  onButtonClick(value);
+  await onButtonClick(value);
 });
 
 
