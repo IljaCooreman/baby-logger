@@ -43,9 +43,9 @@ const statusQuery = `{
 
 const onButtonClick = async (value) => {
   if (value == 1) return;
-  const napArray = await graphqlRequest(statusQuery)[0];
-  if (!napArray || napArray.length !== 1) return;
-  const { status } = napArray[0];
+  const queryResult = await graphqlRequest(statusQuery)[0];
+  if (!queryResult || !queryResult.napEvents || queryResult.napEvents.length !== 1) return;
+  const { status } = queryResult.napEvents[0];
   const isOngoing = status === "ONGOING";
   const query = isOngoing ? endNapQuery : startNapQuery
   console.log('doing query', query, status, typeof status)
