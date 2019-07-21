@@ -42,7 +42,7 @@ const statusQuery = `{
 // }
 
 const onButtonClick = async (value) => {
-  if (value === 1) return;
+  if (value == 1) return;
   const status = await graphqlRequest(statusQuery);
   const isOngoing = status === "ONGOING";
 
@@ -53,7 +53,7 @@ const onButtonClick = async (value) => {
 
 button.watch((err, value) => {
   console.log('value', value);
-  onButtonClick();
+  onButtonClick(value);
 });
 
 
