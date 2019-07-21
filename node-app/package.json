@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "graphql-request": "^1.8.2"
+    "graphql-request": "^1.8.2",
+    "onoff": "^4.1.3"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

@@ -4,6 +4,7 @@ How to push to ACR:
 `docker push logger.azurecr.io/logger`
 
 backend endpoint hosted at `https://logger-backend.azurewebsites.net/`
+linked to `https://eu1.prisma.sh/public-pinecrest-5/baby-logger-backend/dev`
 
 
 
