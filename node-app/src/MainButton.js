@@ -13,7 +13,7 @@ class MainButton {
     this.blinkingIntervalRefs = []
 
     this.led = new Gpio(17, 'out');
-    this.button = new Gpio(4, 'in', 'both', { debounceTimeout: 200 });
+    this.button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
 
   }
 
@@ -32,8 +32,7 @@ class MainButton {
     this.led.writeSync(state ? 1 : 0)
   }
 
-  startBlinking(speed = 200) {
-    console.log('start all blinking')
+  startBlinking(speed = 100) {
     const intervalRef = setInterval(() => {
       this.changeLedState(this.led.readSync() ^ 1)
     }, speed)
