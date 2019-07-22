@@ -18,13 +18,12 @@ class MainButton {
   }
 
   watch() {
+    const emitter = new EventEmitter();
     this.button.watch((err, value) => {
-      const emitter = new EventEmitter();
       if (err) emitter.emit('error', err)
-      // if (value == 1) return;
-      emitter.emit(ButtonEventTypes.click, this);
-      return emitter;
+      if (value === 0) emitter.emit(ButtonEventTypes.click, this);
     });
+    return emitter;
   }
 
   changeLedState(state) {
