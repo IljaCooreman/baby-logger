@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import { mainButton, ButtonEventTypes } from "./MainButton";
+import { mainButton, ButtonEventTypes } from "./mainButton";
 import { graphqlRequest } from './graphqlRequest'
 import { statusQuery, startNapQuery, endNapQuery } from './queries'
 
@@ -20,7 +20,7 @@ const init = async (mainButton) => {
   console.log('Awaiting input ...');
 
   const isOngoing = await getIsOngoing()
-  mainButton.changeLedState(!isOngoing);
+  // mainButton.changeLedState(!isOngoing);
 
 }
 
@@ -39,13 +39,13 @@ try {
   init(mainButton);
 
   mainButton.watch()
-    .on(ButtonEventTypes.click, onButtonClick)
-    .on(ButtonEventTypes.hold, () => {
-      console.log('hold')
-    })
-    .on(ButtonEventTypes.error, err => {
-      throw new Error(err)
-    })
+  // .on(ButtonEventTypes.click, onButtonClick)
+  // .on(ButtonEventTypes.hold, () => {
+  //   console.log('hold')
+  // })
+  // .on(ButtonEventTypes.error, err => {
+  //   throw new Error(err)
+  // })
 } catch (e) {
   console.log(e)
 }
