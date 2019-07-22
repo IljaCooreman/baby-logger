@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import { mainButton, ButtonEventTypes } from "./mainButton";
+import { mainButton, ButtonEventTypes } from "./MainButton";
 import { graphqlRequest } from './graphqlRequest'
 import { statusQuery, startNapQuery, endNapQuery } from './queries'
 
