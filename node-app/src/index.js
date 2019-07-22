@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import { MainButton, ButtonEventTypes } from "./MainButton";
+import { mainButton, ButtonEventTypes } from "./MainButton";
 import { graphqlRequest } from './graphqlRequest'
 import { statusQuery, startNapQuery, endNapQuery } from './queries'
 
@@ -36,7 +36,6 @@ const onButtonClick = async (mainButton) => {
 
 
 try {
-  const mainButton = new MainButton()
   init(mainButton);
 
   mainButton.watch()

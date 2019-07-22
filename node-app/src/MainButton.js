@@ -7,7 +7,7 @@ export const ButtonEventTypes = {
   error: 'error'
 }
 
-export class MainButton {
+class MainButton {
   constructor() {
     if (!Gpio.accessible) throw new Error("Main button is not accessible. Is every wire connected?")
     this.blinkingIntervalRefs = []
@@ -45,3 +45,5 @@ export class MainButton {
   }
 
 }
+const mainButton = new MainButton();
+export default mainButton;
