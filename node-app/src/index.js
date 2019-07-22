@@ -26,7 +26,7 @@ const init = async (mainButton) => {
 
 
 const onButtonClick = async (mainButton) => {
-  console.log('emitter worked')
+  console.log('mainbutton', mainButton)
   mainButton.startBlinking();
   const isOngoing = await getIsOngoing();
   const query = isOngoing ? endNapQuery : startNapQuery;

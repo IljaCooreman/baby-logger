@@ -22,7 +22,6 @@ class MainButton {
     this.button.watch((err, value) => {
       if (err) emitter.emit('error', err)
       if (value === 0) {
-        console.log('emitter should run')
         emitter.emit(ButtonEventTypes.click, this);
       }
     });
@@ -34,6 +33,7 @@ class MainButton {
   }
 
   startBlinking(speed = 200) {
+    console.log('start all blinking')
     const intervalRef = setInterval(() => {
       this.changeLedState(this.led.readSync() ^ 1)
     }, speed)
