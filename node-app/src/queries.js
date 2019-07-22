@@ -1,31 +1,30 @@
-const { BABY_ID } = require('./constants')
+import { BABY_ID } from './constants'
 
-module.exports = {
-  startNapQuery: `mutation{
+
+export const startNapQuery = `mutation{
   startNap(babyId: "${BABY_ID}") {
     id
   }
-}`,
+}`;
 
-  endNapQuery: `mutation{
+export const endNapQuery = `mutation{
   endNap(babyId: "${BABY_ID}") {
     id
     start
     end
   }
-}`,
+}`;
 
-  listEventsQuery: `{
+export const listEventsQuery = `{
   napEvents(babyId: "${BABY_ID}") {
     id
     start
     end
   }
-}`,
+}`;
 
-  statusQuery: `{
+export const statusQuery = `{
   napEvents(babyId: "${BABY_ID}", last: 1) {
     status
   }
-}`,
-}
+}`;
