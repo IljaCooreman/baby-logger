@@ -21,7 +21,7 @@ class MainButton {
     this.button.watch((err, value) => {
       const emitter = new EventEmitter();
       if (err) emitter.emit('error', err)
-      if (value == 1) return;
+      // if (value == 1) return;
       emitter.emit(ButtonEventTypes.click, this);
       return emitter;
     });
