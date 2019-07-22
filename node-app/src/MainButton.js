@@ -45,5 +45,4 @@ class MainButton {
   }
 
 }
-const mainButton = new MainButton();
-export default mainButton;
+export const mainButton = new MainButton();
