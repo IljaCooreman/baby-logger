@@ -7,6 +7,11 @@ export const ButtonEventTypes = {
   error: 'error'
 }
 
+export const ButtonState = {
+  up: 1,
+  down: 0,
+}
+
 class MainButton {
   constructor() {
     if (!Gpio.accessible) throw new Error("Main button is not accessible. Is every wire connected?")
@@ -19,10 +24,23 @@ class MainButton {
 
   watch() {
     const emitter = new EventEmitter();
+    let buttonPressStart = null;
     this.button.watch((err, value) => {
       if (err) emitter.emit('error', err)
-      if (value === 0) {
-        emitter.emit(ButtonEventTypes.click, this);
+      switch (value) {
+        case ButtonState.down:
+          buttonPressStart = performance.now();
+          break;
+        case ButtonState.up:
+          if (buttonPressStart) {
+            const pressDuration = performance.now() - buttonPressStart
+            pressDuration > 400 ?
+              emitter.emit(ButtonEventTypes.hold, this) :
+              emitter.emit(ButtonEventTypes.click, this);
+
+            buttonPressStart = null;
+          }
+          break;
       }
     });
     return emitter;
@@ -42,6 +60,7 @@ class MainButton {
   stopAllBlinking() {
     this.blinkingIntervalRefs.forEach(intervalRef => {
       clearInterval(intervalRef)
+      // TODO: remove interval from array to free up memory
     })
   }
 

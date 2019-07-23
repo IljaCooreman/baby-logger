@@ -40,8 +40,12 @@ try {
 
   mainButton.watch()
     .on(ButtonEventTypes.click, onButtonClick)
-    .on(ButtonEventTypes.hold, () => {
+    .on(ButtonEventTypes.hold, (mainButton) => {
       console.log('hold')
+      mainButton.startBlinking(500)
+      setTimeout(() => {
+        mainButton.stopAllBlinking();
+      }, 5000)
     })
     .on(ButtonEventTypes.error, err => {
       throw new Error(err)
