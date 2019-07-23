@@ -1,5 +1,6 @@
 import { Gpio } from 'onoff'
 import { EventEmitter } from 'events'
+import { performance } from 'perf_hooks'
 
 export const ButtonEventTypes = {
   click: 'click',
