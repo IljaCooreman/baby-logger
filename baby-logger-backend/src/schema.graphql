@@ -9,6 +9,8 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload!
   startNap(babyId: ID!, start: String, end: String): NapEvent!
   endNap(babyId: ID!, end: String, napId: ID): NapEvent!
+  createIntervention(babyId: ID!, severity: Severity): Intervention!
+  toggleNap(babyId: ID!, timestamp: String): NapEvent!
 }
 
 
@@ -45,4 +47,17 @@ type NapEvent {
   status: Status!
   baby: Baby!
   duration: Int
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HEAVY
+}
+
+type Intervention {
+  id: ID!
+  timestamp: String!
+  severity: Severity
+  napEvent: NapEvent!
 }

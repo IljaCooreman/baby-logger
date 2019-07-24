@@ -6,6 +6,10 @@ export const typeDefs = /* GraphQL */ `type AggregateBaby {
   count: Int!
 }
 
+type AggregateIntervention {
+  count: Int!
+}
+
 type AggregateNapEvent {
   count: Int!
 }
@@ -235,6 +239,119 @@ type BatchPayload {
   count: Long!
 }
 
+type Intervention {
+  id: ID!
+  timestamp: String!
+  severity: Severity
+  napEvent: NapEvent!
+}
+
+type InterventionConnection {
+  pageInfo: PageInfo!
+  edges: [InterventionEdge]!
+  aggregate: AggregateIntervention!
+}
+
+input InterventionCreateInput {
+  id: ID
+  timestamp: String!
+  severity: Severity
+  napEvent: NapEventCreateOneInput!
+}
+
+type InterventionEdge {
+  node: Intervention!
+  cursor: String!
+}
+
+enum InterventionOrderByInput {
+  id_ASC
+  id_DESC
+  timestamp_ASC
+  timestamp_DESC
+  severity_ASC
+  severity_DESC
+}
+
+type InterventionPreviousValues {
+  id: ID!
+  timestamp: String!
+  severity: Severity
+}
+
+type InterventionSubscriptionPayload {
+  mutation: MutationType!
+  node: Intervention
+  updatedFields: [String!]
+  previousValues: InterventionPreviousValues
+}
+
+input InterventionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: InterventionWhereInput
+  AND: [InterventionSubscriptionWhereInput!]
+  OR: [InterventionSubscriptionWhereInput!]
+  NOT: [InterventionSubscriptionWhereInput!]
+}
+
+input InterventionUpdateInput {
+  timestamp: String
+  severity: Severity
+  napEvent: NapEventUpdateOneRequiredInput
+}
+
+input InterventionUpdateManyMutationInput {
+  timestamp: String
+  severity: Severity
+}
+
+input InterventionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  timestamp: String
+  timestamp_not: String
+  timestamp_in: [String!]
+  timestamp_not_in: [String!]
+  timestamp_lt: String
+  timestamp_lte: String
+  timestamp_gt: String
+  timestamp_gte: String
+  timestamp_contains: String
+  timestamp_not_contains: String
+  timestamp_starts_with: String
+  timestamp_not_starts_with: String
+  timestamp_ends_with: String
+  timestamp_not_ends_with: String
+  severity: Severity
+  severity_not: Severity
+  severity_in: [Severity!]
+  severity_not_in: [Severity!]
+  napEvent: NapEventWhereInput
+  AND: [InterventionWhereInput!]
+  OR: [InterventionWhereInput!]
+  NOT: [InterventionWhereInput!]
+}
+
+input InterventionWhereUniqueInput {
+  id: ID
+  timestamp: String
+}
+
 scalar Long
 
 type Mutation {
@@ -244,6 +361,12 @@ type Mutation {
   upsertBaby(where: BabyWhereUniqueInput!, create: BabyCreateInput!, update: BabyUpdateInput!): Baby!
   deleteBaby(where: BabyWhereUniqueInput!): Baby
   deleteManyBabies(where: BabyWhereInput): BatchPayload!
+  createIntervention(data: InterventionCreateInput!): Intervention!
+  updateIntervention(data: InterventionUpdateInput!, where: InterventionWhereUniqueInput!): Intervention
+  updateManyInterventions(data: InterventionUpdateManyMutationInput!, where: InterventionWhereInput): BatchPayload!
+  upsertIntervention(where: InterventionWhereUniqueInput!, create: InterventionCreateInput!, update: InterventionUpdateInput!): Intervention!
+  deleteIntervention(where: InterventionWhereUniqueInput!): Intervention
+  deleteManyInterventions(where: InterventionWhereInput): BatchPayload!
   createNapEvent(data: NapEventCreateInput!): NapEvent!
   updateNapEvent(data: NapEventUpdateInput!, where: NapEventWhereUniqueInput!): NapEvent
   updateManyNapEvents(data: NapEventUpdateManyMutationInput!, where: NapEventWhereInput): BatchPayload!
@@ -289,6 +412,11 @@ input NapEventCreateInput {
 input NapEventCreateManyWithoutBabyInput {
   create: [NapEventCreateWithoutBabyInput!]
   connect: [NapEventWhereUniqueInput!]
+}
+
+input NapEventCreateOneInput {
+  create: NapEventCreateInput
+  connect: NapEventWhereUniqueInput
 }
 
 input NapEventCreateWithoutBabyInput {
@@ -391,6 +519,13 @@ input NapEventSubscriptionWhereInput {
   NOT: [NapEventSubscriptionWhereInput!]
 }
 
+input NapEventUpdateDataInput {
+  start: String
+  end: String
+  status: Status
+  baby: BabyUpdateOneRequiredWithoutNapEventsInput
+}
+
 input NapEventUpdateInput {
   start: String
   end: String
@@ -427,6 +562,13 @@ input NapEventUpdateManyWithWhereNestedInput {
   data: NapEventUpdateManyDataInput!
 }
 
+input NapEventUpdateOneRequiredInput {
+  create: NapEventCreateInput
+  update: NapEventUpdateDataInput
+  upsert: NapEventUpsertNestedInput
+  connect: NapEventWhereUniqueInput
+}
+
 input NapEventUpdateWithoutBabyDataInput {
   start: String
   end: String
@@ -436,6 +578,11 @@ input NapEventUpdateWithoutBabyDataInput {
 input NapEventUpdateWithWhereUniqueWithoutBabyInput {
   where: NapEventWhereUniqueInput!
   data: NapEventUpdateWithoutBabyDataInput!
+}
+
+input NapEventUpsertNestedInput {
+  update: NapEventUpdateDataInput!
+  create: NapEventCreateInput!
 }
 
 input NapEventUpsertWithWhereUniqueWithoutBabyInput {
@@ -499,6 +646,8 @@ input NapEventWhereInput {
 
 input NapEventWhereUniqueInput {
   id: ID
+  start: String
+  end: String
 }
 
 interface Node {
@@ -516,6 +665,9 @@ type Query {
   baby(where: BabyWhereUniqueInput!): Baby
   babies(where: BabyWhereInput, orderBy: BabyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Baby]!
   babiesConnection(where: BabyWhereInput, orderBy: BabyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BabyConnection!
+  intervention(where: InterventionWhereUniqueInput!): Intervention
+  interventions(where: InterventionWhereInput, orderBy: InterventionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Intervention]!
+  interventionsConnection(where: InterventionWhereInput, orderBy: InterventionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InterventionConnection!
   napEvent(where: NapEventWhereUniqueInput!): NapEvent
   napEvents(where: NapEventWhereInput, orderBy: NapEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NapEvent]!
   napEventsConnection(where: NapEventWhereInput, orderBy: NapEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NapEventConnection!
@@ -523,6 +675,12 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HEAVY
 }
 
 enum Status {
@@ -533,6 +691,7 @@ enum Status {
 
 type Subscription {
   baby(where: BabySubscriptionWhereInput): BabySubscriptionPayload
+  intervention(where: InterventionSubscriptionWhereInput): InterventionSubscriptionPayload
   napEvent(where: NapEventSubscriptionWhereInput): NapEventSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }

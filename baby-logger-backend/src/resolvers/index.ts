@@ -1,5 +1,6 @@
 import { Baby } from './Baby';
 import { auth } from './Mutation/auth';
+import { interventions } from './Mutation/interventions';
 import { napEvents } from './Mutation/napEvents';
 import { NapEvent } from './NapEvent';
 import { Query } from './Query';
@@ -10,6 +11,7 @@ export default {
   Mutation: {
     ...auth,
     ...napEvents,
+    ...interventions
   },
   User,
   Baby,

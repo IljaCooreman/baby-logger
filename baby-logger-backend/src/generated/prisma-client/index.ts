@@ -17,6 +17,7 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   baby: (where?: BabyWhereInput) => Promise<boolean>;
+  intervention: (where?: InterventionWhereInput) => Promise<boolean>;
   napEvent: (where?: NapEventWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -59,6 +60,27 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => BabyConnectionPromise;
+  intervention: (
+    where: InterventionWhereUniqueInput
+  ) => InterventionNullablePromise;
+  interventions: (args?: {
+    where?: InterventionWhereInput;
+    orderBy?: InterventionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Intervention>;
+  interventionsConnection: (args?: {
+    where?: InterventionWhereInput;
+    orderBy?: InterventionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => InterventionConnectionPromise;
   napEvent: (where: NapEventWhereUniqueInput) => NapEventNullablePromise;
   napEvents: (args?: {
     where?: NapEventWhereInput;
@@ -119,6 +141,26 @@ export interface Prisma {
   }) => BabyPromise;
   deleteBaby: (where: BabyWhereUniqueInput) => BabyPromise;
   deleteManyBabies: (where?: BabyWhereInput) => BatchPayloadPromise;
+  createIntervention: (data: InterventionCreateInput) => InterventionPromise;
+  updateIntervention: (args: {
+    data: InterventionUpdateInput;
+    where: InterventionWhereUniqueInput;
+  }) => InterventionPromise;
+  updateManyInterventions: (args: {
+    data: InterventionUpdateManyMutationInput;
+    where?: InterventionWhereInput;
+  }) => BatchPayloadPromise;
+  upsertIntervention: (args: {
+    where: InterventionWhereUniqueInput;
+    create: InterventionCreateInput;
+    update: InterventionUpdateInput;
+  }) => InterventionPromise;
+  deleteIntervention: (
+    where: InterventionWhereUniqueInput
+  ) => InterventionPromise;
+  deleteManyInterventions: (
+    where?: InterventionWhereInput
+  ) => BatchPayloadPromise;
   createNapEvent: (data: NapEventCreateInput) => NapEventPromise;
   updateNapEvent: (args: {
     data: NapEventUpdateInput;
@@ -163,6 +205,9 @@ export interface Subscription {
   baby: (
     where?: BabySubscriptionWhereInput
   ) => BabySubscriptionPayloadSubscription;
+  intervention: (
+    where?: InterventionSubscriptionWhereInput
+  ) => InterventionSubscriptionPayloadSubscription;
   napEvent: (
     where?: NapEventSubscriptionWhereInput
   ) => NapEventSubscriptionPayloadSubscription;
@@ -192,6 +237,16 @@ export type NapEventOrderByInput =
   | "status_DESC";
 
 export type BabyOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
+
+export type Severity = "LOW" | "MEDIUM" | "HEAVY";
+
+export type InterventionOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "timestamp_ASC"
+  | "timestamp_DESC"
+  | "severity_ASC"
+  | "severity_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -365,8 +420,54 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export type InterventionWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  timestamp?: Maybe<String>;
+}>;
+
+export interface InterventionWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  timestamp?: Maybe<String>;
+  timestamp_not?: Maybe<String>;
+  timestamp_in?: Maybe<String[] | String>;
+  timestamp_not_in?: Maybe<String[] | String>;
+  timestamp_lt?: Maybe<String>;
+  timestamp_lte?: Maybe<String>;
+  timestamp_gt?: Maybe<String>;
+  timestamp_gte?: Maybe<String>;
+  timestamp_contains?: Maybe<String>;
+  timestamp_not_contains?: Maybe<String>;
+  timestamp_starts_with?: Maybe<String>;
+  timestamp_not_starts_with?: Maybe<String>;
+  timestamp_ends_with?: Maybe<String>;
+  timestamp_not_ends_with?: Maybe<String>;
+  severity?: Maybe<Severity>;
+  severity_not?: Maybe<Severity>;
+  severity_in?: Maybe<Severity[] | Severity>;
+  severity_not_in?: Maybe<Severity[] | Severity>;
+  napEvent?: Maybe<NapEventWhereInput>;
+  AND?: Maybe<InterventionWhereInput[] | InterventionWhereInput>;
+  OR?: Maybe<InterventionWhereInput[] | InterventionWhereInput>;
+  NOT?: Maybe<InterventionWhereInput[] | InterventionWhereInput>;
+}
+
 export type NapEventWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
+  start?: Maybe<String>;
+  end?: Maybe<String>;
 }>;
 
 export type UserWhereUniqueInput = AtLeastOne<{
@@ -538,6 +639,18 @@ export interface BabyUpdateManyMutationInput {
   name?: Maybe<String>;
 }
 
+export interface InterventionCreateInput {
+  id?: Maybe<ID_Input>;
+  timestamp: String;
+  severity?: Maybe<Severity>;
+  napEvent: NapEventCreateOneInput;
+}
+
+export interface NapEventCreateOneInput {
+  create?: Maybe<NapEventCreateInput>;
+  connect?: Maybe<NapEventWhereUniqueInput>;
+}
+
 export interface NapEventCreateInput {
   id?: Maybe<ID_Input>;
   start: String;
@@ -557,7 +670,20 @@ export interface BabyCreateWithoutNapEventsInput {
   parent: UserCreateOneWithoutBabiesInput;
 }
 
-export interface NapEventUpdateInput {
+export interface InterventionUpdateInput {
+  timestamp?: Maybe<String>;
+  severity?: Maybe<Severity>;
+  napEvent?: Maybe<NapEventUpdateOneRequiredInput>;
+}
+
+export interface NapEventUpdateOneRequiredInput {
+  create?: Maybe<NapEventCreateInput>;
+  update?: Maybe<NapEventUpdateDataInput>;
+  upsert?: Maybe<NapEventUpsertNestedInput>;
+  connect?: Maybe<NapEventWhereUniqueInput>;
+}
+
+export interface NapEventUpdateDataInput {
   start?: Maybe<String>;
   end?: Maybe<String>;
   status?: Maybe<Status>;
@@ -579,6 +705,23 @@ export interface BabyUpdateWithoutNapEventsDataInput {
 export interface BabyUpsertWithoutNapEventsInput {
   update: BabyUpdateWithoutNapEventsDataInput;
   create: BabyCreateWithoutNapEventsInput;
+}
+
+export interface NapEventUpsertNestedInput {
+  update: NapEventUpdateDataInput;
+  create: NapEventCreateInput;
+}
+
+export interface InterventionUpdateManyMutationInput {
+  timestamp?: Maybe<String>;
+  severity?: Maybe<Severity>;
+}
+
+export interface NapEventUpdateInput {
+  start?: Maybe<String>;
+  end?: Maybe<String>;
+  status?: Maybe<Status>;
+  baby?: Maybe<BabyUpdateOneRequiredWithoutNapEventsInput>;
 }
 
 export interface NapEventUpdateManyMutationInput {
@@ -707,6 +850,23 @@ export interface BabySubscriptionWhereInput {
   AND?: Maybe<BabySubscriptionWhereInput[] | BabySubscriptionWhereInput>;
   OR?: Maybe<BabySubscriptionWhereInput[] | BabySubscriptionWhereInput>;
   NOT?: Maybe<BabySubscriptionWhereInput[] | BabySubscriptionWhereInput>;
+}
+
+export interface InterventionSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<InterventionWhereInput>;
+  AND?: Maybe<
+    InterventionSubscriptionWhereInput[] | InterventionSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    InterventionSubscriptionWhereInput[] | InterventionSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    InterventionSubscriptionWhereInput[] | InterventionSubscriptionWhereInput
+  >;
 }
 
 export interface NapEventSubscriptionWhereInput {
@@ -964,6 +1124,95 @@ export interface AggregateBabySubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface Intervention {
+  id: ID_Output;
+  timestamp: String;
+  severity?: Severity;
+}
+
+export interface InterventionPromise
+  extends Promise<Intervention>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  timestamp: () => Promise<String>;
+  severity: () => Promise<Severity>;
+  napEvent: <T = NapEventPromise>() => T;
+}
+
+export interface InterventionSubscription
+  extends Promise<AsyncIterator<Intervention>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  timestamp: () => Promise<AsyncIterator<String>>;
+  severity: () => Promise<AsyncIterator<Severity>>;
+  napEvent: <T = NapEventSubscription>() => T;
+}
+
+export interface InterventionNullablePromise
+  extends Promise<Intervention | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  timestamp: () => Promise<String>;
+  severity: () => Promise<Severity>;
+  napEvent: <T = NapEventPromise>() => T;
+}
+
+export interface InterventionConnection {
+  pageInfo: PageInfo;
+  edges: InterventionEdge[];
+}
+
+export interface InterventionConnectionPromise
+  extends Promise<InterventionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<InterventionEdge>>() => T;
+  aggregate: <T = AggregateInterventionPromise>() => T;
+}
+
+export interface InterventionConnectionSubscription
+  extends Promise<AsyncIterator<InterventionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<InterventionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateInterventionSubscription>() => T;
+}
+
+export interface InterventionEdge {
+  node: Intervention;
+  cursor: String;
+}
+
+export interface InterventionEdgePromise
+  extends Promise<InterventionEdge>,
+    Fragmentable {
+  node: <T = InterventionPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface InterventionEdgeSubscription
+  extends Promise<AsyncIterator<InterventionEdge>>,
+    Fragmentable {
+  node: <T = InterventionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateIntervention {
+  count: Int;
+}
+
+export interface AggregateInterventionPromise
+  extends Promise<AggregateIntervention>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateInterventionSubscription
+  extends Promise<AsyncIterator<AggregateIntervention>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface NapEventConnection {
   pageInfo: PageInfo;
   edges: NapEventEdge[];
@@ -1134,6 +1383,53 @@ export interface BabyPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
+export interface InterventionSubscriptionPayload {
+  mutation: MutationType;
+  node: Intervention;
+  updatedFields: String[];
+  previousValues: InterventionPreviousValues;
+}
+
+export interface InterventionSubscriptionPayloadPromise
+  extends Promise<InterventionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = InterventionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = InterventionPreviousValuesPromise>() => T;
+}
+
+export interface InterventionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<InterventionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = InterventionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = InterventionPreviousValuesSubscription>() => T;
+}
+
+export interface InterventionPreviousValues {
+  id: ID_Output;
+  timestamp: String;
+  severity?: Severity;
+}
+
+export interface InterventionPreviousValuesPromise
+  extends Promise<InterventionPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  timestamp: () => Promise<String>;
+  severity: () => Promise<Severity>;
+}
+
+export interface InterventionPreviousValuesSubscription
+  extends Promise<AsyncIterator<InterventionPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  timestamp: () => Promise<AsyncIterator<String>>;
+  severity: () => Promise<AsyncIterator<Severity>>;
+}
+
 export interface NapEventSubscriptionPayload {
   mutation: MutationType;
   node: NapEvent;
@@ -1276,6 +1572,14 @@ export const models: Model[] = [
   },
   {
     name: "NapEvent",
+    embedded: false
+  },
+  {
+    name: "Severity",
+    embedded: false
+  },
+  {
+    name: "Intervention",
     embedded: false
   }
 ];

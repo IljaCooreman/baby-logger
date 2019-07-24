@@ -21,8 +21,15 @@ enum Status {
 
 type NapEvent {
   id: ID! @id
-  start: String!
-  end: String
+  start: String! @unique
+  end: String @unique
   status: Status!
   baby: Baby!
+}
+
+
+type Intervention {
+  id: ID! @id
+  timestamp: String! @unique
+  napEvent: NapEvent!
 }

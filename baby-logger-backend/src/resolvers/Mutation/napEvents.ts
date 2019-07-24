@@ -1,9 +1,18 @@
+import { NapEvent } from '../../generated/prisma-client';
 import { Context } from '../../utils';
+
+import moment = require('moment');
 
 export enum Status {
   complete = "COMPLETE",
   ongoing = "ONGOING",
   incomplete = "INCOMPLETE"
+}
+
+const isNoSpamCheck = (napEvent, now, minSpamTime = 2000) => {
+  const { end, start } = napEvent
+  const timediff = moment(now).diff(end ? end : start);
+  return timediff > minSpamTime
 }
 
 export const napEvents = {
@@ -45,6 +54,33 @@ export const napEvents = {
         end: end || new Date().toISOString()
       }
     })
+  },
 
-  }
+  async toggleNap(parent, { babyId, timestamp }, ctx: Context) {
+    const napArray = ctx.prisma.napEvents({
+      last: 1,
+      where: { baby: { id: babyId } }
+    });
+    const lastNap: NapEvent = napArray[0]
+    const nap = lastNap && isNoSpamCheck(lastNap, new Date().toISOString()) ?
+      await ctx.prisma.updateNapEvent({
+        where: { id: lastNap[0].id },
+        data: {
+          status: Status.complete,
+          end: timestamp || new Date().toISOString()
+        }
+      }) :
+      await ctx.prisma.createNapEvent({
+        baby: { connect: { id: babyId } },
+        status: Status.ongoing,
+        start: timestamp || new Date().toISOString()
+      })
+
+    await ctx.prisma.updateManyNapEvents({
+      where: { status: Status.ongoing },
+      data: { status: Status.incomplete }
+    });
+
+    return nap
+  },
 }
