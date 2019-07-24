@@ -42,9 +42,9 @@ const onButtonHold = async (mainButton, severity) => {
 
 
 try {
-  mainButton.startBlinking();
+  // mainButton.startBlinking();
 
-  // init(mainButton);
+  init(mainButton);
 
   mainButton.watch()
     .on(ButtonEventTypes.click, onButtonClick)
