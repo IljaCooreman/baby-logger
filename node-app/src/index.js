@@ -26,15 +26,8 @@ const init = async (mainButton) => {
 
 
 const onButtonClick = async (mainButton) => {
-  mainButton.startBlinking();
-  graphqlRequest(toggleNapQuery)
-    .catch(e => {
-      console.log(e);
-      mainButton.stopAllBlinking();
-    });
-  mainButton.stopAllBlinking();
-  const isOngoing = await getIsOngoing();
-  mainButton.changeLedState(isOngoing);
+  const { toggleNap } = await graphqlRequest(toggleNapQuery)
+  if (toggleNap.status) mainButton.changeLedState(status === "ONGOING");
 }
 
 const onButtonHold = async mainButton => {

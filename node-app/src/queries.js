@@ -20,6 +20,7 @@ export const toggleNapQuery = `mutation{
     id
     start
     end
+    status
   }
 }`;
 

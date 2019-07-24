@@ -3,5 +3,7 @@ import { ENDPOINT } from './constants'
 
 
 export const graphqlRequest = function (query) {
-  return request(ENDPOINT, query).then(data => { console.log(data); return data })
+  return request(ENDPOINT, query).then(data => { console.log(data); return data }).catch(e => {
+    console.log(e);
+  });
 }
