@@ -39,7 +39,7 @@ class MainButton {
 
         case ButtonState.down:
           buttonPressStart = performance.now();
-          if (this.led.readSync() === 1) { //FIXME: ugly hack
+          if (this.led.readSync() === 0) { //FIXME: ugly hack. 0 means on btw
             holdTimeoutRef = setTimeout(() => {
               this.startBlinking(300)
             }, 1000)
