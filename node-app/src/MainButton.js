@@ -16,7 +16,7 @@ export const ButtonState = {
 export const Severity = {
   low: "LOW",
   medium: "MEDIUM",
-  high: "HIGH"
+  high: "HEAVY"
 }
 
 class MainButton {
