@@ -2,7 +2,7 @@
 
 import { mainButton, ButtonEventTypes } from "./MainButton";
 import { graphqlRequest } from './graphqlRequest'
-import { statusQuery, toggleNapQuery } from './queries'
+import { statusQuery, toggleNapQuery, createInterventionQuery } from './queries'
 
 const getStatus = async () => {
   const queryResult = await graphqlRequest(statusQuery);
@@ -37,19 +37,25 @@ const onButtonClick = async (mainButton) => {
   mainButton.changeLedState(isOngoing);
 }
 
+const onButtonHold = async mainButton => {
+  mainButton.startBlinking(400)
+  graphqlRequest(createInterventionQuery)
+    .catch(e => {
+      console.log(e);
+      mainButton.stopAllBlinking();
+    });
+  setTimeout(() => {
+    mainButton.stopAllBlinking();
+  }, 1200)
+}
+
 
 try {
   init(mainButton);
 
   mainButton.watch()
     .on(ButtonEventTypes.click, onButtonClick)
-    .on(ButtonEventTypes.hold, (mainButton) => {
-      console.log('hold')
-      mainButton.startBlinking(500)
-      setTimeout(() => {
-        mainButton.stopAllBlinking();
-      }, 5000)
-    })
+    .on(ButtonEventTypes.hold, onButtonHold)
     .on(ButtonEventTypes.error, err => {
       throw new Error(err)
     })

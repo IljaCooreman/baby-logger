@@ -36,3 +36,10 @@ export const statusQuery = `{
     status
   }
 }`;
+
+export const createInterventionQuery = `{
+  createIntervention(babyId: "${BABY_ID}", severity: "LOW") {
+    id
+    timestamp
+  }
+}`;
