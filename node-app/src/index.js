@@ -2,7 +2,7 @@
 
 import { mainButton, ButtonEventTypes } from "./MainButton";
 import { graphqlRequest } from './graphqlRequest'
-import { statusQuery, startNapQuery, endNapQuery } from './queries'
+import { statusQuery, toggleNapQuery } from './queries'
 
 const getStatus = async () => {
   const queryResult = await graphqlRequest(statusQuery);
@@ -27,11 +27,13 @@ const init = async (mainButton) => {
 
 const onButtonClick = async (mainButton) => {
   mainButton.startBlinking();
-  const isOngoing = await getIsOngoing();
-  const query = isOngoing ? endNapQuery : startNapQuery;
-  graphqlRequest(query)
-    .catch(e => { console.log(e) });
+  graphqlRequest(toggleNapQuery)
+    .catch(e => {
+      console.log(e);
+      mainButton.stopAllBlinking();
+    });
   mainButton.stopAllBlinking();
+  const isOngoing = await getIsOngoing();
   mainButton.changeLedState(isOngoing);
 }
 

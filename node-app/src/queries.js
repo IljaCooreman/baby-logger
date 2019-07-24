@@ -15,6 +15,14 @@ export const endNapQuery = `mutation{
   }
 }`;
 
+export const toggleNapQuery = `mutation{
+  toggleNap(babyId: "${BABY_ID}") {
+    id
+    start
+    end
+  }
+}`;
+
 export const listEventsQuery = `{
   napEvents(babyId: "${BABY_ID}") {
     id
