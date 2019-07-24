@@ -20,7 +20,7 @@ const init = async (mainButton) => {
   console.log('Awaiting input ...');
 
   const isOngoing = await getIsOngoing()
-  mainButton.changeLedState(isOngoing);
+  mainButton.changeLedState(!isOngoing); // very weird, but it is inverse. proefondervindelijk
 }
 
 
@@ -28,7 +28,7 @@ const onButtonClick = async (mainButton) => {
   const { toggleNap } = await graphqlRequest(toggleNapQuery);
 
   const isOngoing = toggleNap.status == 'ONGOING'
-  if (toggleNap.status) mainButton.changeLedState(isOngoing);
+  if (toggleNap.status) mainButton.changeLedState(!isOngoing);
 }
 
 const onButtonHold = async (mainButton, severity) => {

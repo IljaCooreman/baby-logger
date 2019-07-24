@@ -66,7 +66,6 @@ class MainButton {
   }
 
   startBlinking(speed = 100) {
-    console.log('start blinkig')
     const intervalRef = setInterval(() => {
       console.log(this.led.readSync() ^ 1)
       this.changeLedState(this.led.readSync() ^ 1)
@@ -75,7 +74,6 @@ class MainButton {
   }
 
   stopAllBlinking() {
-    console.log('stop blikig')
     this.blinkingIntervalRefs.forEach(intervalRef => {
       clearInterval(intervalRef)
     })
