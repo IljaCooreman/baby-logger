@@ -21,11 +21,11 @@ export const Severity = {
 
 class MainButton {
   constructor() {
-    if (!Gpio.accessible) throw new Error("Main button is not accessible. Is every wire connected?")
-    this.blinkingIntervalRefs = []
+    // if (!Gpio.accessible) throw new Error("Main button is not accessible. Is every wire connected?")
+    // this.blinkingIntervalRefs = []
 
-    this.led = new Gpio(17, 'out');
-    this.button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
+    // this.led = new Gpio(17, 'out');
+    // this.button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
 
   }
 
@@ -48,8 +48,9 @@ class MainButton {
           if (buttonPressStart) {
             const pressDuration = performance.now() - buttonPressStart
             pressDuration > 400 ?
-              emitter.emit(ButtonEventTypes.hold, this) :
-              emitter.emit(ButtonEventTypes.click, this, this.calcSeverity(pressDuration));
+              emitter.emit(ButtonEventTypes.hold, this, this.calcSeverity(pressDuration)) :
+              emitter.emit(ButtonEventTypes.click, this);
+            emitter.emit()
             buttonPressStart = null;
             clearTimeout(holdTimeoutRef);
           }

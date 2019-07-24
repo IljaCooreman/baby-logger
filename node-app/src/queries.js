@@ -38,8 +38,8 @@ export const statusQuery = `{
   }
 }`;
 
-export const createInterventionQuery = `{
-  createIntervention(babyId: "${BABY_ID}", severity: "LOW") {
+export const createInterventionQuery = (severity) => `mutation{
+  createIntervention(babyId: "${BABY_ID}", severity: ${severity}) {
     id
     timestamp
   }
