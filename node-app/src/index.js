@@ -30,16 +30,13 @@ const onButtonClick = async (mainButton) => {
   if (toggleNap.status) mainButton.changeLedState(status === "ONGOING");
 }
 
-const onButtonHold = async mainButton => {
-  mainButton.startBlinking(400)
-  graphqlRequest(createInterventionQuery)
-    .catch(e => {
-      console.log(e);
-      mainButton.stopAllBlinking();
-    });
+const onButtonHold = async (mainButton, severity) => {
+  console.log(severity, 'severity')
+  mainButton.startBlinking(100)
+  await graphqlRequest(createInterventionQuery, severity)
   setTimeout(() => {
     mainButton.stopAllBlinking();
-  }, 1200)
+  }, 500)
 }
 
 
@@ -54,6 +51,7 @@ try {
     })
 } catch (e) {
   console.log(e)
+  mainButton.stopAllBlinking();
 }
 
 

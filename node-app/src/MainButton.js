@@ -13,6 +13,12 @@ export const ButtonState = {
   down: 0,
 }
 
+export const Severity = {
+  low: "LOW",
+  medium: "MEDIUM",
+  high: "HIGH"
+}
+
 class MainButton {
   constructor() {
     if (!Gpio.accessible) throw new Error("Main button is not accessible. Is every wire connected?")
@@ -26,20 +32,26 @@ class MainButton {
   watch() {
     const emitter = new EventEmitter();
     let buttonPressStart = null;
+    let holdTimeoutRef = null;
     this.button.watch((err, value) => {
       if (err) emitter.emit('error', err)
       switch (value) {
+
         case ButtonState.down:
           buttonPressStart = performance.now();
+          holdTimeoutRef = setTimeout(() => {
+            this.startBlinking(300)
+          }, 1000)
           break;
+
         case ButtonState.up:
           if (buttonPressStart) {
             const pressDuration = performance.now() - buttonPressStart
             pressDuration > 400 ?
               emitter.emit(ButtonEventTypes.hold, this) :
-              emitter.emit(ButtonEventTypes.click, this);
-
+              emitter.emit(ButtonEventTypes.click, this, this.calcSeverity(pressDuration));
             buttonPressStart = null;
+            clearTimeout(holdTimeoutRef);
           }
           break;
       }
@@ -61,8 +73,14 @@ class MainButton {
   stopAllBlinking() {
     this.blinkingIntervalRefs.forEach(intervalRef => {
       clearInterval(intervalRef)
-      // TODO: remove interval from array to free up memory
     })
+  }
+
+  calcSeverity(duration) {
+    let severity = Severity.low
+    if (duration > 2000) severity = Severity.medium
+    if (duration > 4000) severity = Severity.high
+    return severity;
   }
 
 }
