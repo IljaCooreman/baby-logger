@@ -27,7 +27,7 @@ const init = async (mainButton) => {
 
 const onButtonClick = async (mainButton) => {
   const toggleNap = await graphqlRequest(toggleNapQuery)
-  if (toggleNap.status) mainButton.changeLedState(status === "ONGOING");
+  if (toggleNap.status) mainButton.changeLedState(toggleNap.status === "ONGOING");
 }
 
 const onButtonHold = async (mainButton, severity) => {
