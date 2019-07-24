@@ -36,7 +36,7 @@ const onButtonHold = async (mainButton, severity) => {
   await graphqlRequest(createInterventionQuery(severity))
   mainButton.stopAllBlinking();
   const isOngoing = await getIsOngoing();
-  mainButton.changeLedState(isOngoing);
+  mainButton.changeLedState(!isOngoing);
 }
 
 

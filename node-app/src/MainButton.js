@@ -39,9 +39,11 @@ class MainButton {
 
         case ButtonState.down:
           buttonPressStart = performance.now();
-          holdTimeoutRef = setTimeout(() => {
-            this.startBlinking(300)
-          }, 1000)
+          if (this.led.readSync() === 1) { //FIXME: ugly hack
+            holdTimeoutRef = setTimeout(() => {
+              this.startBlinking(300)
+            }, 1000)
+          }
           break;
 
         case ButtonState.up:
@@ -61,7 +63,6 @@ class MainButton {
   }
 
   changeLedState(state) {
-    console.log(state)
     this.led.writeSync(state ? 1 : 0)
   }
 
