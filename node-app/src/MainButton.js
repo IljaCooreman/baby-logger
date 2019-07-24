@@ -21,11 +21,11 @@ export const Severity = {
 
 class MainButton {
   constructor() {
-    // if (!Gpio.accessible) throw new Error("Main button is not accessible. Is every wire connected?")
-    // this.blinkingIntervalRefs = []
+    if (!Gpio.accessible) throw new Error("Main button is not accessible. Is every wire connected?")
+    this.blinkingIntervalRefs = []
 
-    // this.led = new Gpio(17, 'out');
-    // this.button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
+    this.led = new Gpio(17, 'out');
+    this.button = new Gpio(4, 'in', 'both', { debounceTimeout: 50 });
 
   }
 
