@@ -1,18 +1,27 @@
+import { Timestamp } from 'bson';
+
 import { NapEvent } from '../../generated/prisma-client';
 import { Context } from '../../utils';
 
 import moment = require('moment');
-
 export enum Status {
   complete = "COMPLETE",
   ongoing = "ONGOING",
   incomplete = "INCOMPLETE"
 }
 
-const isNoSpamCheck = (napEvent, now, minSpamTime = 2000) => {
+const isSpamCheck = (napEvent, now, minSpamTime = 2000): Boolean => {
   const { end, start } = napEvent
   const timediff = moment(now).diff(end ? end : start);
-  return timediff > minSpamTime
+  return timediff < minSpamTime
+}
+
+const createNapEvent = async (ctx, babyId): Promise<NapEvent> => {
+  return await ctx.prisma.createNapEvent({
+    baby: { connect: { id: babyId } },
+    status: Status.ongoing,
+    start: new Date().toISOString()
+  })
 }
 
 export const napEvents = {
@@ -26,11 +35,7 @@ export const napEvents = {
     if (ongoingNaps) console.log(`updated ${ongoingNaps.count} nap to INCOMPLETE`)
 
     // 2. createNapEvent
-    const napEvent = await ctx.prisma.createNapEvent({
-      baby: { connect: { id: babyId } },
-      status: Status.ongoing,
-      start: start || new Date().toISOString()
-    })
+    const napEvent = await createNapEvent(ctx, babyId)
     return napEvent
   },
 
@@ -57,26 +62,26 @@ export const napEvents = {
   },
 
   async toggleNap(parent, { babyId, timestamp }, ctx: Context) {
-    const napArray = ctx.prisma.napEvents({
+    const napArray = await ctx.prisma.napEvents({
       last: 1,
       where: { baby: { id: babyId } }
     });
     const lastNap: NapEvent = napArray[0]
-    const nap = lastNap && isNoSpamCheck(lastNap, new Date().toISOString()) ?
+    if (!lastNap) return createNapEvent(ctx, babyId); // in case this is the first event
+
+    if (isSpamCheck(lastNap, new Date().toISOString())) throw new Error('you are spamming, bitch!')
+    const isOngoing = lastNap.status === Status.ongoing;
+    const nap = isOngoing ?
       await ctx.prisma.updateNapEvent({
-        where: { id: lastNap[0].id },
+        where: { id: lastNap.id },
         data: {
           status: Status.complete,
-          end: timestamp || new Date().toISOString()
+          end: new Date().toISOString()
         }
       }) :
-      await ctx.prisma.createNapEvent({
-        baby: { connect: { id: babyId } },
-        status: Status.ongoing,
-        start: timestamp || new Date().toISOString()
-      })
+      await createNapEvent(ctx, babyId);
 
-    await ctx.prisma.updateManyNapEvents({
+    isOngoing && ctx.prisma.updateManyNapEvents({ // not awaiting this to speed up request
       where: { status: Status.ongoing },
       data: { status: Status.incomplete }
     });
