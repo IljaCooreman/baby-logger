@@ -5,8 +5,8 @@ import { graphqlRequest } from './graphqlRequest'
 import { statusQuery, toggleNapQuery, createInterventionQuery } from './queries'
 
 const getStatus = async () => {
-  const queryResult = await graphqlRequest(statusQuery);
-  if (!queryResult || !queryResult.napEvents || queryResult.napEvents.length !== 1) return;
+  const { napEvents } = await graphqlRequest(statusQuery);
+  if (!napEvents || queryResult.napEvents.length !== 1) return;
   return queryResult.napEvents[0].status;
 }
 
@@ -28,7 +28,6 @@ const init = async (mainButton) => {
 const onButtonClick = async (mainButton) => {
   const { toggleNap } = await graphqlRequest(toggleNapQuery)
   const isOngoing = toggleNap.status == 'ONGOING'
-  console.log('isongoing', isOngoing, toggleNap)
   if (toggleNap.status) mainButton.changeLedState(isOngoing);
 }
 
@@ -62,6 +61,6 @@ process.stdin.resume();
 
 process.on('SIGINT', () => {
   console.log('exiting gracefully');
-  led.unexport();
-  button.unexport();
+  mainButton.led.unexport();
+  mainButton.button.unexport();
 });
