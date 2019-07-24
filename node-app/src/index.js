@@ -6,8 +6,8 @@ import { statusQuery, toggleNapQuery, createInterventionQuery } from './queries'
 
 const getStatus = async () => {
   const { napEvents } = await graphqlRequest(statusQuery);
-  if (!napEvents || queryResult.napEvents.length !== 1) return;
-  return queryResult.napEvents[0].status;
+  if (!napEvents || napEvents.length !== 1) return;
+  return napEvents[0].status;
 }
 
 const getIsOngoing = async () => {
