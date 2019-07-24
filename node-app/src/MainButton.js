@@ -65,6 +65,7 @@ class MainButton {
   }
 
   startBlinking(speed = 100) {
+    console.log('start blinkig')
     const intervalRef = setInterval(() => {
       this.changeLedState(this.led.readSync() ^ 1)
     }, speed)
