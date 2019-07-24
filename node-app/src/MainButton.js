@@ -62,7 +62,7 @@ class MainButton {
 
   changeLedState(state) {
     console.log(state)
-    this.led.writeSync(state ? 0 : 1)
+    this.led.writeSync(state ? 1 : 0)
   }
 
   startBlinking(speed = 100) {
