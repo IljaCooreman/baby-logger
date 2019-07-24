@@ -20,13 +20,12 @@ const init = async (mainButton) => {
   console.log('Awaiting input ...');
 
   const isOngoing = await getIsOngoing()
-  mainButton.changeLedState(!isOngoing);
+  mainButton.changeLedState(isOngoing);
 }
 
 
 const onButtonClick = async (mainButton) => {
   const { toggleNap } = await graphqlRequest(toggleNapQuery);
-  console.log("TCL: onButtonClick -> toggleNap", toggleNap)
 
   const isOngoing = toggleNap.status == 'ONGOING'
   if (toggleNap.status) mainButton.changeLedState(isOngoing);
