@@ -1,6 +1,6 @@
 type Query {
   babies: [Baby!]
-  napEvents: [NapEvent]
+  napEvents(babyId: ID!, last: Int): [NapEvent]
   me: User
 }
 
