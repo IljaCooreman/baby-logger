@@ -73,6 +73,7 @@ class MainButton {
   }
 
   stopAllBlinking() {
+    console.log('stop blikig')
     this.blinkingIntervalRefs.forEach(intervalRef => {
       clearInterval(intervalRef)
     })
