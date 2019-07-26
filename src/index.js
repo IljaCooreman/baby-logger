@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 import {
   NavLink,
@@ -10,15 +10,13 @@ import {
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
 
-import FeedPage from './components/FeedPage'
-import DraftsPage from './components/DraftsPage'
-import CreatePage from './components/CreatePage'
-import DetailPage from './components/DetailPage'
+import Today from './components/Today'
 
 import 'tachyons'
 import './index.css'
 
 const client = new ApolloClient({ uri: 'http://localhost:4000' })
+// const client = new ApolloClient({ uri: 'https://logger-backend.azurewebsites.net/' })
 
 ReactDOM.render(
   <ApolloProvider client={client}>
@@ -30,39 +28,32 @@ ReactDOM.render(
             to="/"
             title="Feed"
           >
-            Blog
+            Vandaag
           </Link>
           <NavLink
             className="link dim f6 f5-ns dib mr3 black"
             activeClassName="gray"
             exact={true}
-            to="/"
+            to="/history"
             title="Feed"
           >
-            Feed
+            Historiek
           </NavLink>
           <NavLink
             className="link dim f6 f5-ns dib mr3 black"
             activeClassName="gray"
             exact={true}
-            to="/drafts"
-            title="Drafts"
+            to="/event-register"
+            title="Feed"
           >
-            Drafts
+            Registreer
           </NavLink>
-          <Link
-            to="/create"
-            className="f6 link dim br1 ba ph3 pv2 fr mb2 dib black"
-          >
-            + Create Draft
-          </Link>
         </nav>
         <div className="fl w-100 pl4 pr4">
           <Switch>
-            <Route exact path="/" component={FeedPage} />
-            <Route path="/drafts" component={DraftsPage} />
-            <Route path="/create" component={CreatePage} />
-            <Route path="/post/:id" component={DetailPage} />
+            <Route exact path="/" component={Today} />
+            <Route path="/history" component={Today} />
+            <Route path="/event-register" component={Today} />
           </Switch>
         </div>
       </Fragment>

@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import  { gql } from 'apollo-boost'
-import { DRAFTS_QUERY } from './DraftsPage'
-import { FEED_QUERY } from './FeedPage'
+import { gql } from 'apollo-boost'
+import { DRAFTS_QUERY } from './_DraftsPage'
+import { FEED_QUERY } from './Today'
 
 class DetailPage extends Component {
   render() {

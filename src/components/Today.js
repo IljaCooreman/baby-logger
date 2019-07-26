@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from 'react'
-import Post from '../components/Post'
 import { Query } from 'react-apollo'
-import  { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost'
+import moment from 'moment'
 
-export default class FeedPage extends Component {
+export default class Today extends Component {
   render() {
     return (
-      <Query query={FEED_QUERY}>
+      <Query query={NAPEVENTS_QUERY}>
         {({ data, loading, error, refetch }) => {
+          console.log(data)
           if (loading) {
             return (
               <div className="flex w-100 h-100 items-center justify-center pt7">
@@ -26,17 +27,17 @@ export default class FeedPage extends Component {
 
           return (
             <Fragment>
-              <h1>Feed</h1>
-              {data.feed &&
-                data.feed.map(post => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    refresh={() => refetch()}
-                    isDraft={!post.published}
-                  />
+              <h1>all events</h1>
+              {data.napEvents &&
+                data.napEvents.map(nap => (
+                  <div key={nap.id}>{moment(nap.start).format("HH:mm")} - {moment(nap.end).format("HH:mm")} duration: {Math.ceil(nap.duration / 60)} minutes status: {nap.status}</div>
                 ))}
               {this.props.children}
+              <br>
+              </br>
+              <div>total: {Math.floor(data.napEvents.reduce((acc, nap) => {
+                return acc + nap.duration
+              }, 0) / 60)} minutes</div>
             </Fragment>
           )
         }}
@@ -45,13 +46,14 @@ export default class FeedPage extends Component {
   }
 }
 
-export const FEED_QUERY = gql`
-  query FeedQuery {
-    feed {
+export const NAPEVENTS_QUERY = gql`
+  query NapEventsQuery {
+    napEvents {
       id
-      content
-      title
-      published
+      start
+      end
+      status
+      duration
     }
   }
 `
