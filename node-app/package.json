@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon --exec babel-node src/index.js ",
-    "build": "babel --presets es2015 -d lib/ src",
-    "start:prod": "yarn build && node lib/index.js"
+    "start:dev": "NODE_ENV=development nodemon --exec babel-node src/index.js ",
+    "build": "NODE_ENV=production babel --presets es2015 -d lib/ src",
+    "start:prod": "NODE_ENV=production yarn build && node lib/index.js"
   },
   "author": "",
   "license": "ISC",
