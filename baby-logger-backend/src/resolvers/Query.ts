@@ -5,8 +5,12 @@ export const Query = {
     return ctx.prisma.babies({ where: { parent: { id } } })
   },
 
-  napEvents(parent, { babyId, last }, ctx: Context) {
-    return ctx.prisma.napEvents({ where: { baby: { id: babyId } }, last })
+  napEvents(parent, { babyId, last, before, after }, ctx: Context) {
+    return ctx.prisma.napEvents({ where: { 
+      baby: { id: babyId },
+      start_gte: after,
+      end_lte: before,
+    }, last })
   },
 
 
