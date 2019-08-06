@@ -2,13 +2,19 @@ import React, { Component, Fragment } from 'react'
 import { Query } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import moment from 'moment'
+import { BABY_ID } from '../constants/variables';
+import DayOverviewGraph from './DayOverviewGraph';
+import { groupEventsByDay } from '../helpers/groupEventsByDay';
 
 export default class Today extends Component {
   render() {
     return (
-      <Query query={NAPEVENTS_QUERY}>
+      <Query query={NAPEVENTS_QUERY} variables={{
+          babyId: BABY_ID, 
+          // before: moment().endOf('week').toISOString(),
+          // after: moment().startOf('week').toISOString()
+        }}>
         {({ data, loading, error, refetch }) => {
-          console.log(data)
           if (loading) {
             return (
               <div className="flex w-100 h-100 items-center justify-center pt7">
@@ -25,19 +31,24 @@ export default class Today extends Component {
             )
           }
 
+          const groupedEvents = groupEventsByDay(data.napEvents);
+
           return (
             <Fragment>
-              <h1>all events</h1>
+              <h1>Overzicht</h1>
+              {
+                Object.keys(groupedEvents).sort((a, b) => new Date(b) - new Date(a)).map(key => {
+                  return <DayOverviewGraph key={key} events={groupedEvents[key]} date={key} />
+                })
+              }
               {data.napEvents &&
                 data.napEvents.map(nap => (
-                  <div key={nap.id}>{moment(nap.start).format("HH:mm")} - {moment(nap.end).format("HH:mm")} duration: {Math.ceil(nap.duration / 60)} minutes status: {nap.status}</div>
+                  <div key={nap.id}>{moment(nap.start).format("DD/MM HH:mm")} - {moment(nap.end).format("HH:mm")} duration: {Math.ceil(nap.duration / 60)} minutes status: {nap.status}</div>
                 ))}
               {this.props.children}
               <br>
               </br>
-              <div>total: {Math.floor(data.napEvents.reduce((acc, nap) => {
-                return acc + nap.duration
-              }, 0) / 60)} minutes</div>
+              
             </Fragment>
           )
         }}
@@ -47,8 +58,8 @@ export default class Today extends Component {
 }
 
 export const NAPEVENTS_QUERY = gql`
-  query NapEventsQuery {
-    napEvents {
+  query NapEventsQuery($babyId: ID!, $before: String, $after: String) {
+    napEvents (babyId: $babyId, before: $before, after: $after) {
       id
       start
       end

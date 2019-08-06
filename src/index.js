@@ -14,9 +14,10 @@ import Today from './components/Today'
 
 import 'tachyons'
 import './index.css'
+import { BACKEND_ENDPOINT } from './constants/variables';
 
-const client = new ApolloClient({ uri: 'http://localhost:4000' })
-// const client = new ApolloClient({ uri: 'https://logger-backend.azurewebsites.net/' })
+// const client = new ApolloClient({ uri: 'http://localhost:4000' })
+const client = new ApolloClient({ uri: BACKEND_ENDPOINT })
 
 ReactDOM.render(
   <ApolloProvider client={client}>
