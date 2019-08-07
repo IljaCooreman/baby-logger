@@ -1,14 +1,16 @@
 /** @jsx jsx */
 
+import {useState} from 'react'
 import {css, jsx} from '@emotion/core'
 import moment from 'moment'
 import { calcTotalSleepingTime } from '../helpers/calcTotalSleepingTime';
+import EventListContainer from './EventListContainer';
 
 const containerStyle = css`
     border-radius: 14px;
     background-color: white;
     width: 100%;
-    padding: 15px;
+    padding: 20px;
     margin: 25px 0;
     color: #536ECD;
     `;
@@ -50,10 +52,11 @@ const calcEventsDayPercentage = (events, date) => {
 
 const DayOverviewGraph = ({events, date}) => {
 
+    const [isVisible, setisVisible] = useState(false)
     const totalSleepingTime = calcTotalSleepingTime(events);
 
     return (
-        <div css={containerStyle}>
+        <div css={containerStyle}  onClick={() => setisVisible(!isVisible)}>
             {moment(date).format('dddd DD/MM')}
             <div css={barStyle}>
                 {
@@ -67,6 +70,7 @@ const DayOverviewGraph = ({events, date}) => {
             <div style={{textAlign: "right"}}>
             {Math.floor(totalSleepingTime.hours)}h {totalSleepingTime.minutes}m
             </div>
+            <EventListContainer isVisible={isVisible} events={events} />
         </div>
     )
 }

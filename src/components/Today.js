@@ -41,14 +41,6 @@ export default class Today extends Component {
                   return <DayOverviewGraph key={key} events={groupedEvents[key]} date={key} />
                 })
               }
-              {data.napEvents &&
-                data.napEvents.map(nap => (
-                  <div key={nap.id}>{moment(nap.start).format("DD/MM HH:mm")} - {moment(nap.end).format("HH:mm")} duration: {Math.ceil(nap.duration / 60)} minutes status: {nap.status}</div>
-                ))}
-              {this.props.children}
-              <br>
-              </br>
-              
             </Fragment>
           )
         }}
