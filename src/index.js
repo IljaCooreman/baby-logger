@@ -15,6 +15,7 @@ import Today from './components/Today'
 import 'tachyons'
 import './index.css'
 import { BACKEND_ENDPOINT } from './constants/variables';
+import ToggleNap from './components/ToggleNap';
 
 // const client = new ApolloClient({ uri: 'http://localhost:4000' })
 const client = new ApolloClient({ uri: BACKEND_ENDPOINT })
@@ -31,7 +32,7 @@ ReactDOM.render(
           >
             Vandaag
           </Link>
-          <NavLink
+          {/* <NavLink
             className="link dim f6 f5-ns dib mr3 white"
             activeClassName="gray"
             exact={true}
@@ -39,7 +40,7 @@ ReactDOM.render(
             title="Feed"
           >
             Historiek
-          </NavLink>
+          </NavLink> */}
           <NavLink
             className="link dim f6 f5-ns dib mr3 white"
             activeClassName="gray"
@@ -54,7 +55,7 @@ ReactDOM.render(
           <Switch>
             <Route exact path="/" component={Today} />
             <Route path="/history" component={Today} />
-            <Route path="/event-register" component={Today} />
+            <Route path="/event-register" component={ToggleNap} />
           </Switch>
         </div>
       </Fragment>

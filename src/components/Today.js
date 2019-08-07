@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Query } from 'react-apollo'
 import { gql } from 'apollo-boost'
-import moment from 'moment'
 import { BABY_ID } from '../constants/variables';
 import DayOverviewGraph from './DayOverviewGraph';
 import { groupEventsByDay } from '../helpers/groupEventsByDay';

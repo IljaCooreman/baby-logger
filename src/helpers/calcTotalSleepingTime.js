@@ -3,7 +3,6 @@ export const calcTotalSleepingTime = events => {
         return acc + nap.duration
       }, 0))
     
-      console.log(totalSeconds)
     return {
         hours: Math.floor(totalSeconds / (60 * 60)),
         minutes: Math.floor(totalSeconds / 60 % (60)),
