@@ -25,14 +25,14 @@ ReactDOM.render(
       <Fragment>
         <nav className="pa3 pa4-ns">
           <Link
-            className="link dim black b f6 f5-ns dib mr3"
+            className="link dim white b f6 f5-ns dib mr3"
             to="/"
             title="Feed"
           >
             Vandaag
           </Link>
           <NavLink
-            className="link dim f6 f5-ns dib mr3 black"
+            className="link dim f6 f5-ns dib mr3 white"
             activeClassName="gray"
             exact={true}
             to="/history"
@@ -41,7 +41,7 @@ ReactDOM.render(
             Historiek
           </NavLink>
           <NavLink
-            className="link dim f6 f5-ns dib mr3 black"
+            className="link dim f6 f5-ns dib mr3 white"
             activeClassName="gray"
             exact={true}
             to="/event-register"

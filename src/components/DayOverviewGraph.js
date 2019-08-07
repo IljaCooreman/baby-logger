@@ -5,20 +5,21 @@ import moment from 'moment'
 import { calcTotalSleepingTime } from '../helpers/calcTotalSleepingTime';
 
 const containerStyle = css`
-    border-radius: 6px;
-    background-color: #c1c1c1;
+    border-radius: 14px;
+    background-color: white;
     width: 100%;
-    padding: 10px;
-    margin: 10px;
+    padding: 15px;
+    margin: 25px 0;
+    color: #536ECD;
     `;
     
     const barStyle = css`
     position: relative;
-    height: 30px;
+    height: 14px;
     color: grey;
     border-radius: 4px;
     width: 100%;
-    background: white;
+    background: #EFF3FF;
     margin: 6px 0;
 `;
 
@@ -28,7 +29,7 @@ const eventStyle = (start, end, status) => {
         position: absolute;
         left: ${start > 0 ? start : 0}%;
         right: ${end < 100 ? 100 - end : 0}%;
-        background: ${status === "ONGOING" ? 'blue' : 'black'};
+        background: ${status === "ONGOING" ? '#FF8A1E' : '#5175F1'};
         height: 100%;
         `;
 }
