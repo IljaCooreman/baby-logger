@@ -1,5 +1,6 @@
 How to push to ACR:
 
+`docker build -t logger.azurecr.io/logger .`
 `az acr login --name logger.azurecr.io/logger`
 `az acr login --name logger -p <password> -u logger --subscription POCforAPT`
 `docker push logger.azurecr.io/logger`

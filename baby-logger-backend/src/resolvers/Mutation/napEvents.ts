@@ -86,11 +86,24 @@ export const napEvents = {
       }) :
       await createNapEvent(ctx, babyId);
 
-    isOngoing && ctx.prisma.updateManyNapEvents({ // not awaiting this to speed up request
+    await isOngoing && ctx.prisma.updateManyNapEvents({ // not awaiting this to speed up request
       where: { status: Status.ongoing },
       data: { status: Status.incomplete }
     });
 
     return nap
   },
+  
+  async updateNapEvent(parent, {id, start, end}, ctx: Context): Promise<NapEvent> {
+    return await ctx.prisma.updateNapEvent({
+      where: {id},
+      data: {start, end}
+    })
+  },
+
+  async deleteNapEvent(parent, {id}, ctx: Context): Promise<NapEvent> {
+    return await ctx.prisma.deleteNapEvent({
+      id,
+    })
+  }
 }

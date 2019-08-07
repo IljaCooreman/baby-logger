@@ -11,6 +11,8 @@ type Mutation {
   endNap(babyId: ID!, end: String, napId: ID): NapEvent!
   createIntervention(babyId: ID!, severity: Severity): Intervention!
   toggleNap(babyId: ID!, timestamp: String): NapEvent!
+  updateNapEvent(id: ID!, start: String, end: String): NapEvent!
+  deleteNapEvent(id: ID!): NapEvent!
 }
 
 
