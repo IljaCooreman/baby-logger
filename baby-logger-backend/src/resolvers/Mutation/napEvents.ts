@@ -62,14 +62,15 @@ export const napEvents = {
   },
 
   async toggleNap(parent, { babyId, timestamp }, ctx: Context) {
-    const lastNap = await ctx.prisma.napEvents({
+    const lastNaps = await ctx.prisma.napEvents({
       last: 1,
       where: { baby: { id: babyId } }
-    })[0];
-    console.log("TCL: toggleNap -> lastNap", lastNap)
+    });
+    const lastNap = lastNaps[0]
+;    console.log("TCL: toggleNap -> lastNap", lastNap)
     if (!lastNap) {
-      await createNapEvent(ctx, babyId);
-      return;
+      const firstNap = await createNapEvent(ctx, babyId);
+      return firstNap;
     } // in case this is the first event
 
     if (isSpamCheck(lastNap, new Date().toISOString())) throw new Error('you are spamming, bitch!')
