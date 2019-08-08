@@ -1,4 +1,4 @@
-import { Timestamp } from 'bson';
+
 
 import { NapEvent } from '../../generated/prisma-client';
 import { Context } from '../../utils';
@@ -16,16 +16,17 @@ const isSpamCheck = (napEvent, now, minSpamTime = 2000): Boolean => {
   return timediff < minSpamTime
 }
 
-const createNapEvent = async (ctx, babyId): Promise<NapEvent> => {
+const createNapEvent = async (ctx, babyId: string, start?: string, end?: string, status?: Status): Promise<NapEvent> => {
   return await ctx.prisma.createNapEvent({
     baby: { connect: { id: babyId } },
-    status: Status.ongoing,
-    start: new Date().toISOString()
+    status: status || end ? Status.complete : Status.ongoing,
+    start: start || new Date().toISOString(),
+    end
   })
 }
 
 export const napEvents = {
-  async startNap(parent, { babyId, start }, ctx: Context) {
+  async startNap(parent, { babyId, start, end, status }, ctx: Context) {
     // 0. check whether previous nap is more than x seconds ago (prevent spamming)
     // 1. check if previous nap is ongoing, if so, set it to incomplete
     const ongoingNaps = await ctx.prisma.updateManyNapEvents({
@@ -34,8 +35,9 @@ export const napEvents = {
     });
     if (ongoingNaps) console.log(`updated ${ongoingNaps.count} nap to INCOMPLETE`)
 
+
     // 2. createNapEvent
-    const napEvent = await createNapEvent(ctx, babyId)
+    const napEvent = await createNapEvent(ctx, babyId, start, end, status)
     return napEvent
   },
 

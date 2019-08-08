@@ -8,7 +8,10 @@ import { groupEventsByDay } from '../helpers/groupEventsByDay';
 export default class Today extends Component {
   render() {
     return (
-      <Query query={NAPEVENTS_QUERY} variables={{
+      <Query 
+      query={NAPEVENTS_QUERY} 
+      fetchPolicy='network-only'
+      variables={{
           babyId: BABY_ID, 
           // before: moment().endOf('week').toISOString(),
           // after: moment().startOf('week').toISOString()

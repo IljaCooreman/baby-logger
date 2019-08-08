@@ -19,12 +19,19 @@ enum Status {
   INCOMPLETE
 }
 
+enum Severity {
+  LOW
+  MEDIUM
+  HEAVY
+}
+
 type NapEvent {
   id: ID! @id
   start: String! @unique
   end: String @unique
   status: Status!
   baby: Baby!
+  slot: String
 }
 
 
@@ -32,4 +39,5 @@ type Intervention {
   id: ID! @id
   timestamp: String! @unique
   napEvent: NapEvent!
+  severity: Severity
 }

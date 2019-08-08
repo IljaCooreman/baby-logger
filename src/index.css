@@ -1,10 +1,11 @@
 @import 'https://fonts.googleapis.com/css?family=Open+Sans:300, 400';
+@import '~antd/dist/antd.css';
 
 body {
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
-  background: #5175F1;
+  background: #5175F1!important;
 }
 
 html {
@@ -43,7 +44,7 @@ html {
 }
 
 h1 {
-  color: white;
+  color: white!important;
 }
 
 .content {

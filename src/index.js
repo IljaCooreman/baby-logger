@@ -15,7 +15,7 @@ import Today from './components/Today'
 import 'tachyons'
 import './index.css'
 import { BACKEND_ENDPOINT } from './constants/variables';
-import ToggleNap from './components/ToggleNap';
+import Register from './components/Register';
 
 // const client = new ApolloClient({ uri: 'http://localhost:4000' })
 const client = new ApolloClient({ uri: BACKEND_ENDPOINT })
@@ -55,7 +55,7 @@ ReactDOM.render(
           <Switch>
             <Route exact path="/" component={Today} />
             <Route path="/history" component={Today} />
-            <Route path="/event-register" component={ToggleNap} />
+            <Route path="/event-register" component={Register} />
           </Switch>
         </div>
       </Fragment>

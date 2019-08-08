@@ -2,6 +2,9 @@
 
 import {css, jsx} from '@emotion/core'
 import moment from 'moment'
+import { Button } from 'antd';
+import { useState } from 'react';
+import UpdateNapEvent from './UpdateNapEvent';
 
 const containerStyle = css`
     border-radius: 6px;
@@ -15,16 +18,35 @@ const containerStyle = css`
 
 
 const EventListItem = ({event}) => {
-    return (
-        <div css={containerStyle}>
-            <div>
+    const [isEditing, setIsEditing] = useState(false);
+    if (isEditing) return (
+        <div css={containerStyle} onClick={e => e.stopPropagation()}>
+            <UpdateNapEvent {...event} />
 
+            <Button 
+            shape="circle" 
+            icon="close"
+            onClick={
+                (e) => {
+                    e.preventDefault(); 
+                    setIsEditing(false)
+                }
+            } />
+        </div>
+    );
+    return (
+        <div css={containerStyle} onClick={e => e.stopPropagation()}>
+            <div>
             {moment(event.start).format("HH:mm")} - {moment(event.end).format("HH:mm")}
             </div>
              <div>
-
-             {Math.ceil(event.duration / 60)}minutes
+             {Math.ceil(event.duration / 60)}m
              </div>
+             <Button onClick={
+                (e) => {
+                    e.preventDefault(); 
+                    setIsEditing(true);
+                }}>Edit</Button>
         </div>
     )
 }

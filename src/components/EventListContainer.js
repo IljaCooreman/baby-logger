@@ -11,7 +11,7 @@ const EventListContainer = ({events, isVisible}) => {
         {
             events.map(event => {
                 return (
-                    <EventListItem key={event.key} event={event} />
+                    <EventListItem key={event.id} event={event} />
                 )
             })
         }

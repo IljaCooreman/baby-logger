@@ -7,7 +7,7 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  startNap(babyId: ID!, start: String, end: String): NapEvent!
+  startNap(babyId: ID!, start: String, end: String, status: Status): NapEvent!
   endNap(babyId: ID!, end: String, napId: ID): NapEvent!
   createIntervention(babyId: ID!, severity: Severity): Intervention!
   toggleNap(babyId: ID!, timestamp: String): NapEvent!

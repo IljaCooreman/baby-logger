@@ -28,7 +28,7 @@ const containerStyle = css`
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  min-height: 30vh;
 `
 
 const subtextStyle = css`
@@ -40,7 +40,7 @@ margin: 16px;
 
 const ToggleNap = () => {
   const [status, setStatus] = useState("INCOMPLETE");
-  const [toggleNap, { loading: mutationLoading, error: mutationError, data: mutationData, called: mutationCalled }] = useMutation(TOGGLE_NAP_QUERY, 
+  const [toggleNap, { loading: mutationLoading, error: mutationError, called: mutationCalled }] = useMutation(TOGGLE_NAP_QUERY, 
     {
       onCompleted({toggleNap}) {
         setStatus(toggleNap.status)
@@ -55,7 +55,11 @@ const ToggleNap = () => {
   };
 
     return (
-      <Query query={STATUS_QUERY} variables={{babyId: BABY_ID}}>
+      <Query 
+        query={STATUS_QUERY} 
+        variables={{babyId: BABY_ID}}
+        fetchPolicy='network-only'
+      >
         {({ data, loading, error, refetch }) => {
           if (loading) {
             return (
@@ -73,7 +77,7 @@ const ToggleNap = () => {
             )
           }
           const firstStatus = data.napEvents[0] ? data.napEvents[0].status : "INCOMPLETE"
-          const babyName = data.napEvents[0].baby.name;
+          const babyName = data.napEvents[0] ? data.napEvents[0].baby.name : "uw baby";
           const buttonText = status === "ONGOING" ? "stop nap" : "start nap";
           if (!mutationCalled) setStatus(firstStatus)
           return (
