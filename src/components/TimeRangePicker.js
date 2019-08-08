@@ -7,10 +7,7 @@ import moment from 'moment'
 
 
 const containerStyle = css`
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: flex-start;
+
 `
 
 

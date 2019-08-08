@@ -5,6 +5,7 @@ import moment from 'moment'
 import { Button } from 'antd';
 import { useState } from 'react';
 import UpdateNapEvent from './UpdateNapEvent';
+import DeleteNapEvent from './DeleteNapEvent';
 
 const containerStyle = css`
     border-radius: 6px;
@@ -13,17 +14,37 @@ const containerStyle = css`
     padding: 12px;
     margin: 6px 0;
     display: flex;
+    justify-content: space-between;
+    `;
+
+    const containerEditStyle = css`
+    position: relative;
+    border-radius: 6px;
+    background-color: #E1E7FD;
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    display: flex;
+    flex-flow: column;
     justify-content: space-around;
     `;
+
+    const closeButtonStyle = css`
+        position: absolute;
+        top: 8px;
+        right: 8px;
+    `
 
 
 const EventListItem = ({event}) => {
     const [isEditing, setIsEditing] = useState(false);
     if (isEditing) return (
-        <div css={containerStyle} onClick={e => e.stopPropagation()}>
+        <div css={containerEditStyle} onClick={e => e.stopPropagation()}>
             <UpdateNapEvent {...event} />
+            <DeleteNapEvent {...event} />
 
             <Button 
+            css={closeButtonStyle}
             shape="circle" 
             icon="close"
             onClick={
