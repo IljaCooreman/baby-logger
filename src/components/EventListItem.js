@@ -6,10 +6,12 @@ import { Button } from 'antd';
 import { useState } from 'react';
 import UpdateNapEvent from './UpdateNapEvent';
 import DeleteNapEvent from './DeleteNapEvent';
+import { secondsToHoursMinutes } from '../helpers/secondsToHoursMinutes';
 
-const containerStyle = css`
+const containerStyle = (status) => css`
     border-radius: 6px;
-    background-color: #E1E7FD;
+    background-color: ${status === "ONGOING" ? "#FFE4CB" : "#E1E7FD"};
+    border: ${status === "INCOMPLETE" ? "1px dotted #5175F1" : "none"};
     width: 100%;
     padding: 12px;
     margin: 6px 0;
@@ -38,6 +40,7 @@ const containerStyle = css`
 
 const EventListItem = ({event, refetch}) => {
     const [isEditing, setIsEditing] = useState(false);
+    const duration = secondsToHoursMinutes(event.duration);
     if (isEditing) return (
         <div css={containerEditStyle} onClick={e => e.stopPropagation()}>
             <UpdateNapEvent {...event} />
@@ -56,12 +59,12 @@ const EventListItem = ({event, refetch}) => {
         </div>
     );
     return (
-        <div css={containerStyle} onClick={e => e.stopPropagation()}>
+        <div css={() => containerStyle(event.status)} onClick={e => e.stopPropagation()}>
             <div>
             {moment(event.start).format("HH:mm")} - {moment(event.end).format("HH:mm")}
             </div>
-             <div>
-             {Math.ceil(event.duration / 60)}m
+             <div style={{fontWeight: "bold"}}>
+             {duration.hours}u {duration.minutes}m
              </div>
              <Button onClick={
                 (e) => {

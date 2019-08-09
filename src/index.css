@@ -6,11 +6,19 @@ body {
   padding: 0;
   font-family: 'Open Sans', sans-serif;
   background: #5175F1!important;
+  position: relative;
+}
+
+#root {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 html {
   box-sizing: border-box;
 }
+
 
 *,
 *:before,

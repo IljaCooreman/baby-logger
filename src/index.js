@@ -30,7 +30,7 @@ ReactDOM.render(
             to="/"
             title="Feed"
           >
-            Vandaag
+            Overzicht
           </Link>
           {/* <NavLink
             className="link dim f6 f5-ns dib mr3 white"

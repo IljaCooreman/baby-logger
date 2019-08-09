@@ -6,10 +6,12 @@ import EventListItem from './EventListItem';
 
 const EventListContainer = ({events, isVisible, refetch}) => {
     if (!isVisible) return null;
+    const sortedEvents = [...events].sort((a, b) => new Date(b.start) - new Date(a.start))
+    console.log(events, sortedEvents)
     return (
         <div>
         {
-            events.map(event => {
+            sortedEvents.map(event => {
                 return (
                     <EventListItem key={event.id} event={event} refetch={refetch} />
                 )

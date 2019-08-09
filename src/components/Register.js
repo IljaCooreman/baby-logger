@@ -5,6 +5,7 @@ import AddNapEvent from './AddNapEvent';
 const Register = () => {
     return (
         <Fragment>
+            <h1>Registreer</h1>
             <ToggleNap />
             <AddNapEvent />
         </Fragment>
