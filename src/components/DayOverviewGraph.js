@@ -50,7 +50,7 @@ const calcEventsDayPercentage = (events, date) => {
     })
 }
 
-const DayOverviewGraph = ({events, date}) => {
+const DayOverviewGraph = ({events, date, refetch}) => {
 
     const [isVisible, setisVisible] = useState(false)
     const totalSleepingTime = calcTotalSleepingTime(events);
@@ -70,7 +70,7 @@ const DayOverviewGraph = ({events, date}) => {
             <div style={{textAlign: "right"}}>
             {Math.floor(totalSleepingTime.hours)}h {totalSleepingTime.minutes}m
             </div>
-            <EventListContainer isVisible={isVisible} events={events} />
+            <EventListContainer isVisible={isVisible} events={events} refetch={refetch} />
         </div>
     )
 }

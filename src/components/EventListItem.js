@@ -36,12 +36,12 @@ const containerStyle = css`
     `
 
 
-const EventListItem = ({event}) => {
+const EventListItem = ({event, refetch}) => {
     const [isEditing, setIsEditing] = useState(false);
     if (isEditing) return (
         <div css={containerEditStyle} onClick={e => e.stopPropagation()}>
             <UpdateNapEvent {...event} />
-            <DeleteNapEvent {...event} />
+            <DeleteNapEvent {...event} refetch={refetch} />
 
             <Button 
             css={closeButtonStyle}

@@ -40,7 +40,7 @@ export default class Today extends Component {
               <h1>Overzicht</h1>
               {
                 Object.keys(groupedEvents).sort((a, b) => new Date(b) - new Date(a)).map(key => {
-                  return <DayOverviewGraph key={key} events={groupedEvents[key]} date={key} />
+                  return <DayOverviewGraph key={key} events={groupedEvents[key]} date={key} refetch={refetch} />
                 })
               }
             </Fragment>

@@ -24,33 +24,27 @@ color: #FF391E;
 `;
 
 
-const DeleteNapEvent = ({id}) => {
+const DeleteNapEvent = ({id, refetch}) => {
   const [requestComplete, setRequestComplete] = useState(true)
   const [deleteNapEvent, { loading, error, data }] = useMutation(DELETE_NAP_EVENT, 
     {
       onCompleted() {
-          setRequestComplete(true)
+          setRequestComplete(true);
+          refetch();
       }
     }
   );
 
   if (loading) {
     return (
-      <div css={containerStyle}>Gegevens aanpassen...</div>
+      <div css={containerStyle}>Gegevens doorsturen...</div>
     )
   }
 
   if (error) {
-    return (<div css={containerStyle}>This went wrong: ${error.message}</div>)
+    return (<div css={containerStyle}>Er ging iets fout: ${error.message}</div>)
   }
 
-  if (requestComplete && data) {
-    return (
-      <div css={containerStyle}>
-        <h1>Dutje is verwijderd. Refresh om te kunnen zien.</h1>
-      </div>
-    )
-  }
 
   function showDeleteConfirm() {
     confirm({
