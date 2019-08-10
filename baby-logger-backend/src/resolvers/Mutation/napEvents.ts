@@ -105,6 +105,7 @@ export const napEvents = {
   },
 
   async deleteNapEvent(parent, {id}, ctx: Context): Promise<NapEvent> {
+    await ctx.prisma.deleteManyInterventions({napEvent: {id}});
     return await ctx.prisma.deleteNapEvent({
       id,
     })
