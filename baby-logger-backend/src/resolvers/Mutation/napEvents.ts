@@ -1,9 +1,10 @@
 
 
 import { NapEvent } from '../../generated/prisma-client';
-import { Context } from '../../utils';
+import { Context, assignSlot } from '../../utils';
 
 import moment = require('moment');
+import { schedule } from '../../schedule';
 export enum Status {
   complete = "COMPLETE",
   ongoing = "ONGOING",
@@ -17,11 +18,16 @@ const isSpamCheck = (napEvent, now, minSpamTime = 2000): Boolean => {
 }
 
 const createNapEvent = async (ctx, babyId: string, start?: string, end?: string, status?: Status): Promise<NapEvent> => {
+  const localStart = start || new Date().toISOString();
+  
+  console.log(assignSlot(start, schedule))
+
   return await ctx.prisma.createNapEvent({
     baby: { connect: { id: babyId } },
     status: status || end ? Status.complete : Status.ongoing,
-    start: start || new Date().toISOString(),
-    end
+    start: localStart,
+    end,
+    slot: assignSlot(start, schedule)
   })
 }
 

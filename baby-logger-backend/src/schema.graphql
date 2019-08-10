@@ -49,6 +49,7 @@ type NapEvent {
   status: Status!
   baby: Baby!
   duration: Int
+  slot: String
 }
 
 enum Severity {
