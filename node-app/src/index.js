@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 
-import { mainButton, ButtonEventTypes } from "./MainButton";
+// import { mainButton, ButtonEventTypes } from "./MainButton";
 import { graphqlRequest } from './graphqlRequest'
 import { statusQuery, toggleNapQuery, createInterventionQuery } from './queries'
+import { motionSensor } from "./MotionSensor";
 
 const getStatus = async () => {
   const { napEvents } = await graphqlRequest(statusQuery);
@@ -10,58 +11,58 @@ const getStatus = async () => {
   return napEvents[0].status;
 }
 
-const getIsOngoing = async () => {
-  const status = await getStatus();
-  return status === "ONGOING"
-}
+// const getIsOngoing = async () => {
+//   const status = await getStatus();
+//   return status === "ONGOING"
+// }
 
-const init = async (mainButton) => {
-  console.log('#### baby logger ####')
-  console.log('Awaiting input ...');
+// const init = async (mainButton) => {
+//   console.log('#### baby logger ####')
+//   console.log('Awaiting input ...');
 
-  const isOngoing = await getIsOngoing()
-  mainButton.changeLedState(!isOngoing); // very weird, but it is inverse. proefondervindelijk
-}
+//   const isOngoing = await getIsOngoing()
+//   mainButton.changeLedState(!isOngoing); // very weird, but it is inverse. proefondervindelijk
+// }
 
 
-const onButtonClick = async (mainButton) => {
-  const { toggleNap } = await graphqlRequest(toggleNapQuery);
+// const onButtonClick = async (mainButton) => {
+//   const { toggleNap } = await graphqlRequest(toggleNapQuery);
 
-  const isOngoing = toggleNap.status == 'ONGOING'
-  if (toggleNap.status) mainButton.changeLedState(!isOngoing);
-}
+//   const isOngoing = toggleNap.status == 'ONGOING'
+//   if (toggleNap.status) mainButton.changeLedState(!isOngoing);
+// }
 
-const onButtonHold = async (mainButton, severity) => {
-  console.log(severity, 'severity')
-  await graphqlRequest(createInterventionQuery(severity))
-  mainButton.stopAllBlinking();
-  const isOngoing = await getIsOngoing();
-  mainButton.changeLedState(!isOngoing);
-}
+// const onButtonHold = async (mainButton, severity) => {
+//   console.log(severity, 'severity')
+//   await graphqlRequest(createInterventionQuery(severity))
+//   mainButton.stopAllBlinking();
+//   const isOngoing = await getIsOngoing();
+//   mainButton.changeLedState(!isOngoing);
+// }
 
 
 try {
-  // mainButton.startBlinking();
+  motionSensor.logValues()
 
-  init(mainButton);
+  // init(mainButton);
 
-  mainButton.watch()
-    .on(ButtonEventTypes.click, onButtonClick)
-    .on(ButtonEventTypes.hold, onButtonHold)
-    .on(ButtonEventTypes.error, err => {
-      throw new Error(err)
-    })
+  // mainButton.watch()
+  //   .on(ButtonEventTypes.click, onButtonClick)
+  //   .on(ButtonEventTypes.hold, onButtonHold)
+  //   .on(ButtonEventTypes.error, err => {
+  //     throw new Error(err)
+  //   })
 } catch (e) {
   console.log(e)
-  mainButton.stopAllBlinking();
+  // mainButton.stopAllBlinking();
 }
 
 
 
 process.stdin.resume();
 
-process.on('SIGINT', () => {
-  console.log('exiting gracefully');
-  mainButton.led.unexport();
-  mainButton.button.unexport();
-});
+// process.on('SIGINT', () => {
+//   console.log('exiting gracefully');
+//   mainButton.led.unexport();
+//   mainButton.button.unexport();
+// });
