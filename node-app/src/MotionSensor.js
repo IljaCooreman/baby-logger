@@ -5,14 +5,21 @@ import { performance } from 'perf_hooks'
 
 
 class MotionSensor {
-  constructor() {
-    if (!Gpio.accessible) throw new Error("Motionsensor is not accessible. Is every wire connected?")
-    this.sensor = new Gpio(14, 'in');
-  }
+    constructor() {
+      if (!Gpio.accessible) throw new Error("Motionsensor is not accessible. Is every wire connected?")
+      this.sensor = new Gpio(18, 'in', 'both');
+    }
+  
+    logValues() {
+        this.sensor.watch((err, value) => {
+        console.log('value', value, new Date());
+        })
+    }
 
-  logValues() {
-    setInterval(() => console.log('logging', this.sensor), 1000);
+    watch() {
+        
+    }
   }
-}
+  
 
 export const motionSensor = new MotionSensor();
