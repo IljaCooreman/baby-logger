@@ -17,6 +17,7 @@ const containerStyle = (status) => css`
     margin: 6px 0;
     display: flex;
     justify-content: space-between;
+    font-size: 12px;
     `;
 
     const containerEditStyle = css`
@@ -60,13 +61,26 @@ const EventListItem = ({event, refetch}) => {
     );
     return (
         <div css={() => containerStyle(event.status)} onClick={e => e.stopPropagation()}>
-            <div>{event.slot}</div>
-            <div>
-            {moment(event.start).format("HH:mm")} - {moment(event.end).format("HH:mm")}
+            <div css={css`display: flex; flex-flow: column;`}>
+                <div css={css`
+                    font-weight: bold;
+                    text-transform: capitalize;
+                    justify-center: "center";
+                    `}>{event.slot}</div>
+                <div>
+                <div>
+                    {moment(event.start).format("HH:mm")} - {event.end ? moment(event.end).format("HH:mm") : "nu"}
+                </div>
             </div>
-             <div style={{fontWeight: "bold"}}>
-             {duration.hours > 0 && `${duration.hours}u`} {duration.minutes}m
-             </div>
+        </div>
+        <div css={css`display: flex; flex-flow: column;`}>
+            <div style={{
+                fontWeight: "bold",
+                fontSize: "16px",
+            }}>
+                {duration.hours > 0 && `${duration.hours}u`} {duration.minutes}m
+            </div>
+        </div>
              <Button onClick={
                 (e) => {
                     e.preventDefault(); 

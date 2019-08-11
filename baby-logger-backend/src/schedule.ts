@@ -17,23 +17,23 @@ export interface ScheduleSlot {
 
 export const schedule: ScheduleSlot[] = [
     {
-        start: "2019-08-10T09:00:00+02:00",
-        end: "2019-08-10T09:45:00+02:00",
+        start: "09:00:00",
+        end: "09:45:00",
         slot: Slot.ochtend,
     },
     {
-        start: "2019-08-10T13:00:00+02:00",
-        end: "2019-08-10T15:00:00+02:00",
+        start: "13:00:00",
+        end: "15:00:00",
         slot: Slot.middag,
     },
     {
-        start: "2019-08-10T16:30:00+02:00",
-        end: "2019-08-10T17:15:00+02:00",
+        start: "16:30:00",
+        end: "17:15:00",
         slot: Slot.namiddag,
     },
     {
-        start: "2019-08-10T19:30:00+02:00",
-        end: "2019-08-10T06:00:00+02:00",
+        start: "19:30:00",
+        end: "06:00:00",
         slot: Slot.nacht,
     },
 ]

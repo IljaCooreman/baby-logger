@@ -36,9 +36,11 @@ export function assignSlot(start: string, schedule: ScheduleSlot[]): Slot {
   const startTimestamp = moment(start).valueOf();
   const startDayString = moment(start).format('DD-MM-YYYY');
 
+  
   const acc: Acc = schedule.reduce((acc, slot) => {
+
     const slotTimestamp = moment(`
-      ${startDayString}-${moment(slot.start).format("HH:mm:ss")}
+      ${startDayString}-${slot.start}
       `, 'DD-MM-YYYY-HH:mm:ss'
       ).valueOf();
     const difference = Math.abs(slotTimestamp - startTimestamp);

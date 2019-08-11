@@ -20,14 +20,12 @@ const isSpamCheck = (napEvent, now, minSpamTime = 2000): Boolean => {
 const createNapEvent = async (ctx, babyId: string, start?: string, end?: string, status?: Status): Promise<NapEvent> => {
   const localStart = start || new Date().toISOString();
 
-  console.log(assignSlot(start, schedule))
-
   return await ctx.prisma.createNapEvent({
     baby: { connect: { id: babyId } },
     status: status || end ? Status.complete : Status.ongoing,
     start: localStart,
     end,
-    slot: assignSlot(start, schedule)
+    slot: assignSlot(localStart, schedule)
   })
 }
 
@@ -75,16 +73,14 @@ export const napEvents = {
       where: { baby: { id: babyId } }
     });
     const lastNap = lastNaps[0]
-;    console.log("TCL: toggleNap -> lastNap", lastNap)
     if (!lastNap) {
-      const firstNap = await createNapEvent(ctx, babyId);
+      const firstNap = await createNapEvent(ctx, babyId, timestamp);
       return firstNap;
     } // in case this is the first event
 
     if (isSpamCheck(lastNap, new Date().toISOString())) throw new Error('you are spamming, bitch!')
 
     const isOngoing = lastNap.status === Status.ongoing;
-    console.log("TCL: toggleNap -> isOngoing", isOngoing)
     const nap = isOngoing ?
       await ctx.prisma.updateNapEvent({
         where: { id: lastNap.id },
@@ -93,7 +89,7 @@ export const napEvents = {
           end: new Date().toISOString()
         }
       }) :
-      await createNapEvent(ctx, babyId);
+      await createNapEvent(ctx, babyId, timestamp);
 
     await isOngoing && ctx.prisma.updateManyNapEvents({ // not awaiting this to speed up request
       where: { status: Status.ongoing },
