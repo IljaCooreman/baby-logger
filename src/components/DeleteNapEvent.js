@@ -25,8 +25,8 @@ color: #FF391E;
 
 
 const DeleteNapEvent = ({id, refetch}) => {
-  const [requestComplete, setRequestComplete] = useState(true)
-  const [deleteNapEvent, { loading, error, data }] = useMutation(DELETE_NAP_EVENT, 
+  const [setRequestComplete] = useState(true)
+  const [deleteNapEvent, { loading, error }] = useMutation(DELETE_NAP_EVENT, 
     {
       onCompleted() {
           setRequestComplete(true);

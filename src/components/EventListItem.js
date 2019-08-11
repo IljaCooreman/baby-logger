@@ -60,11 +60,12 @@ const EventListItem = ({event, refetch}) => {
     );
     return (
         <div css={() => containerStyle(event.status)} onClick={e => e.stopPropagation()}>
+            <div>{event.slot}</div>
             <div>
             {moment(event.start).format("HH:mm")} - {moment(event.end).format("HH:mm")}
             </div>
              <div style={{fontWeight: "bold"}}>
-             {duration.hours}u {duration.minutes}m
+             {duration.hours > 0 && `${duration.hours}u`} {duration.minutes}m
              </div>
              <Button onClick={
                 (e) => {

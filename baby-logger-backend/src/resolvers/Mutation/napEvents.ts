@@ -19,7 +19,7 @@ const isSpamCheck = (napEvent, now, minSpamTime = 2000): Boolean => {
 
 const createNapEvent = async (ctx, babyId: string, start?: string, end?: string, status?: Status): Promise<NapEvent> => {
   const localStart = start || new Date().toISOString();
-  
+
   console.log(assignSlot(start, schedule))
 
   return await ctx.prisma.createNapEvent({
@@ -114,5 +114,17 @@ export const napEvents = {
     return await ctx.prisma.deleteNapEvent({
       id,
     })
+  },
+
+  async recalculateSlots(parent, _, ctx: Context): Promise<void> {
+    const napEvents = await ctx.prisma.napEvents();
+    for (let i = 0; i < napEvents.length; i++) {
+      const napEvent = napEvents[i];
+      const updatedEvent = await ctx.prisma.updateNapEvent({
+        where: {id: napEvent.id},
+        data: {slot: assignSlot(napEvent.start, schedule)}
+      })
+      console.log('event updated', updatedEvent);
+    }
   }
 }

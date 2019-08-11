@@ -8,7 +8,10 @@ export enum Slot {
 export interface ScheduleSlot {
     start: string,
     end: string,
+    center?: string,
+    duration?: number,
     slot: Slot,
+    baby?: string,
 }
 
 
@@ -24,7 +27,7 @@ export const schedule: ScheduleSlot[] = [
         slot: Slot.middag,
     },
     {
-        start: "2019-08-1016:30:00+02:00",
+        start: "2019-08-10T16:30:00+02:00",
         end: "2019-08-10T17:15:00+02:00",
         slot: Slot.namiddag,
     },

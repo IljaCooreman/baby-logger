@@ -13,6 +13,7 @@ type Mutation {
   toggleNap(babyId: ID!, timestamp: String): NapEvent!
   updateNapEvent(id: ID!, start: String, end: String): NapEvent!
   deleteNapEvent(id: ID!): NapEvent!
+  recalculateSlots: NapEvent
 }
 
 
@@ -63,4 +64,14 @@ type Intervention {
   timestamp: String!
   severity: Severity
   napEvent: NapEvent!
+}
+
+type ScheduleSlot {
+  id: ID!
+  start: String!
+  end: String!
+  center: String
+  duration: Int
+  slot: String!
+  baby: Baby!
 }

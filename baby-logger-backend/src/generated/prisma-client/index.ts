@@ -19,6 +19,7 @@ export interface Exists {
   baby: (where?: BabyWhereInput) => Promise<boolean>;
   intervention: (where?: InterventionWhereInput) => Promise<boolean>;
   napEvent: (where?: NapEventWhereInput) => Promise<boolean>;
+  scheduleSlot: (where?: ScheduleSlotWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -100,6 +101,27 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => NapEventConnectionPromise;
+  scheduleSlot: (
+    where: ScheduleSlotWhereUniqueInput
+  ) => ScheduleSlotNullablePromise;
+  scheduleSlots: (args?: {
+    where?: ScheduleSlotWhereInput;
+    orderBy?: ScheduleSlotOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<ScheduleSlot>;
+  scheduleSlotsConnection: (args?: {
+    where?: ScheduleSlotWhereInput;
+    orderBy?: ScheduleSlotOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => ScheduleSlotConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -177,6 +199,26 @@ export interface Prisma {
   }) => NapEventPromise;
   deleteNapEvent: (where: NapEventWhereUniqueInput) => NapEventPromise;
   deleteManyNapEvents: (where?: NapEventWhereInput) => BatchPayloadPromise;
+  createScheduleSlot: (data: ScheduleSlotCreateInput) => ScheduleSlotPromise;
+  updateScheduleSlot: (args: {
+    data: ScheduleSlotUpdateInput;
+    where: ScheduleSlotWhereUniqueInput;
+  }) => ScheduleSlotPromise;
+  updateManyScheduleSlots: (args: {
+    data: ScheduleSlotUpdateManyMutationInput;
+    where?: ScheduleSlotWhereInput;
+  }) => BatchPayloadPromise;
+  upsertScheduleSlot: (args: {
+    where: ScheduleSlotWhereUniqueInput;
+    create: ScheduleSlotCreateInput;
+    update: ScheduleSlotUpdateInput;
+  }) => ScheduleSlotPromise;
+  deleteScheduleSlot: (
+    where: ScheduleSlotWhereUniqueInput
+  ) => ScheduleSlotPromise;
+  deleteManyScheduleSlots: (
+    where?: ScheduleSlotWhereInput
+  ) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -211,6 +253,9 @@ export interface Subscription {
   napEvent: (
     where?: NapEventSubscriptionWhereInput
   ) => NapEventSubscriptionPayloadSubscription;
+  scheduleSlot: (
+    where?: ScheduleSlotSubscriptionWhereInput
+  ) => ScheduleSlotSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -249,6 +294,20 @@ export type InterventionOrderByInput =
   | "timestamp_DESC"
   | "severity_ASC"
   | "severity_DESC";
+
+export type ScheduleSlotOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "start_ASC"
+  | "start_DESC"
+  | "end_ASC"
+  | "end_DESC"
+  | "center_ASC"
+  | "center_DESC"
+  | "duration_ASC"
+  | "duration_DESC"
+  | "slot_ASC"
+  | "slot_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -485,6 +544,98 @@ export type NapEventWhereUniqueInput = AtLeastOne<{
   start?: Maybe<String>;
   end?: Maybe<String>;
 }>;
+
+export type ScheduleSlotWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  start?: Maybe<String>;
+  end?: Maybe<String>;
+  center?: Maybe<String>;
+}>;
+
+export interface ScheduleSlotWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  start?: Maybe<String>;
+  start_not?: Maybe<String>;
+  start_in?: Maybe<String[] | String>;
+  start_not_in?: Maybe<String[] | String>;
+  start_lt?: Maybe<String>;
+  start_lte?: Maybe<String>;
+  start_gt?: Maybe<String>;
+  start_gte?: Maybe<String>;
+  start_contains?: Maybe<String>;
+  start_not_contains?: Maybe<String>;
+  start_starts_with?: Maybe<String>;
+  start_not_starts_with?: Maybe<String>;
+  start_ends_with?: Maybe<String>;
+  start_not_ends_with?: Maybe<String>;
+  end?: Maybe<String>;
+  end_not?: Maybe<String>;
+  end_in?: Maybe<String[] | String>;
+  end_not_in?: Maybe<String[] | String>;
+  end_lt?: Maybe<String>;
+  end_lte?: Maybe<String>;
+  end_gt?: Maybe<String>;
+  end_gte?: Maybe<String>;
+  end_contains?: Maybe<String>;
+  end_not_contains?: Maybe<String>;
+  end_starts_with?: Maybe<String>;
+  end_not_starts_with?: Maybe<String>;
+  end_ends_with?: Maybe<String>;
+  end_not_ends_with?: Maybe<String>;
+  center?: Maybe<String>;
+  center_not?: Maybe<String>;
+  center_in?: Maybe<String[] | String>;
+  center_not_in?: Maybe<String[] | String>;
+  center_lt?: Maybe<String>;
+  center_lte?: Maybe<String>;
+  center_gt?: Maybe<String>;
+  center_gte?: Maybe<String>;
+  center_contains?: Maybe<String>;
+  center_not_contains?: Maybe<String>;
+  center_starts_with?: Maybe<String>;
+  center_not_starts_with?: Maybe<String>;
+  center_ends_with?: Maybe<String>;
+  center_not_ends_with?: Maybe<String>;
+  duration?: Maybe<Int>;
+  duration_not?: Maybe<Int>;
+  duration_in?: Maybe<Int[] | Int>;
+  duration_not_in?: Maybe<Int[] | Int>;
+  duration_lt?: Maybe<Int>;
+  duration_lte?: Maybe<Int>;
+  duration_gt?: Maybe<Int>;
+  duration_gte?: Maybe<Int>;
+  slot?: Maybe<String>;
+  slot_not?: Maybe<String>;
+  slot_in?: Maybe<String[] | String>;
+  slot_not_in?: Maybe<String[] | String>;
+  slot_lt?: Maybe<String>;
+  slot_lte?: Maybe<String>;
+  slot_gt?: Maybe<String>;
+  slot_gte?: Maybe<String>;
+  slot_contains?: Maybe<String>;
+  slot_not_contains?: Maybe<String>;
+  slot_starts_with?: Maybe<String>;
+  slot_not_starts_with?: Maybe<String>;
+  slot_ends_with?: Maybe<String>;
+  slot_not_ends_with?: Maybe<String>;
+  baby?: Maybe<BabyWhereInput>;
+  AND?: Maybe<ScheduleSlotWhereInput[] | ScheduleSlotWhereInput>;
+  OR?: Maybe<ScheduleSlotWhereInput[] | ScheduleSlotWhereInput>;
+  NOT?: Maybe<ScheduleSlotWhereInput[] | ScheduleSlotWhereInput>;
+}
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -767,6 +918,56 @@ export interface NapEventUpdateManyMutationInput {
   slot?: Maybe<String>;
 }
 
+export interface ScheduleSlotCreateInput {
+  id?: Maybe<ID_Input>;
+  start: String;
+  end: String;
+  center?: Maybe<String>;
+  duration?: Maybe<Int>;
+  slot: String;
+  baby: BabyCreateOneInput;
+}
+
+export interface BabyCreateOneInput {
+  create?: Maybe<BabyCreateInput>;
+  connect?: Maybe<BabyWhereUniqueInput>;
+}
+
+export interface ScheduleSlotUpdateInput {
+  start?: Maybe<String>;
+  end?: Maybe<String>;
+  center?: Maybe<String>;
+  duration?: Maybe<Int>;
+  slot?: Maybe<String>;
+  baby?: Maybe<BabyUpdateOneRequiredInput>;
+}
+
+export interface BabyUpdateOneRequiredInput {
+  create?: Maybe<BabyCreateInput>;
+  update?: Maybe<BabyUpdateDataInput>;
+  upsert?: Maybe<BabyUpsertNestedInput>;
+  connect?: Maybe<BabyWhereUniqueInput>;
+}
+
+export interface BabyUpdateDataInput {
+  name?: Maybe<String>;
+  napEvents?: Maybe<NapEventUpdateManyWithoutBabyInput>;
+  parent?: Maybe<UserUpdateOneRequiredWithoutBabiesInput>;
+}
+
+export interface BabyUpsertNestedInput {
+  update: BabyUpdateDataInput;
+  create: BabyCreateInput;
+}
+
+export interface ScheduleSlotUpdateManyMutationInput {
+  start?: Maybe<String>;
+  end?: Maybe<String>;
+  center?: Maybe<String>;
+  duration?: Maybe<Int>;
+  slot?: Maybe<String>;
+}
+
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   email: String;
@@ -918,6 +1119,23 @@ export interface NapEventSubscriptionWhereInput {
   OR?: Maybe<NapEventSubscriptionWhereInput[] | NapEventSubscriptionWhereInput>;
   NOT?: Maybe<
     NapEventSubscriptionWhereInput[] | NapEventSubscriptionWhereInput
+  >;
+}
+
+export interface ScheduleSlotSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ScheduleSlotWhereInput>;
+  AND?: Maybe<
+    ScheduleSlotSubscriptionWhereInput[] | ScheduleSlotSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    ScheduleSlotSubscriptionWhereInput[] | ScheduleSlotSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    ScheduleSlotSubscriptionWhereInput[] | ScheduleSlotSubscriptionWhereInput
   >;
 }
 
@@ -1310,6 +1528,107 @@ export interface AggregateNapEventSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface ScheduleSlot {
+  id: ID_Output;
+  start: String;
+  end: String;
+  center?: String;
+  duration?: Int;
+  slot: String;
+}
+
+export interface ScheduleSlotPromise
+  extends Promise<ScheduleSlot>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  start: () => Promise<String>;
+  end: () => Promise<String>;
+  center: () => Promise<String>;
+  duration: () => Promise<Int>;
+  slot: () => Promise<String>;
+  baby: <T = BabyPromise>() => T;
+}
+
+export interface ScheduleSlotSubscription
+  extends Promise<AsyncIterator<ScheduleSlot>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  start: () => Promise<AsyncIterator<String>>;
+  end: () => Promise<AsyncIterator<String>>;
+  center: () => Promise<AsyncIterator<String>>;
+  duration: () => Promise<AsyncIterator<Int>>;
+  slot: () => Promise<AsyncIterator<String>>;
+  baby: <T = BabySubscription>() => T;
+}
+
+export interface ScheduleSlotNullablePromise
+  extends Promise<ScheduleSlot | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  start: () => Promise<String>;
+  end: () => Promise<String>;
+  center: () => Promise<String>;
+  duration: () => Promise<Int>;
+  slot: () => Promise<String>;
+  baby: <T = BabyPromise>() => T;
+}
+
+export interface ScheduleSlotConnection {
+  pageInfo: PageInfo;
+  edges: ScheduleSlotEdge[];
+}
+
+export interface ScheduleSlotConnectionPromise
+  extends Promise<ScheduleSlotConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ScheduleSlotEdge>>() => T;
+  aggregate: <T = AggregateScheduleSlotPromise>() => T;
+}
+
+export interface ScheduleSlotConnectionSubscription
+  extends Promise<AsyncIterator<ScheduleSlotConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ScheduleSlotEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateScheduleSlotSubscription>() => T;
+}
+
+export interface ScheduleSlotEdge {
+  node: ScheduleSlot;
+  cursor: String;
+}
+
+export interface ScheduleSlotEdgePromise
+  extends Promise<ScheduleSlotEdge>,
+    Fragmentable {
+  node: <T = ScheduleSlotPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ScheduleSlotEdgeSubscription
+  extends Promise<AsyncIterator<ScheduleSlotEdge>>,
+    Fragmentable {
+  node: <T = ScheduleSlotSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateScheduleSlot {
+  count: Int;
+}
+
+export interface AggregateScheduleSlotPromise
+  extends Promise<AggregateScheduleSlot>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateScheduleSlotSubscription
+  extends Promise<AsyncIterator<AggregateScheduleSlot>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface UserConnection {
   pageInfo: PageInfo;
   edges: UserEdge[];
@@ -1524,6 +1843,62 @@ export interface NapEventPreviousValuesSubscription
   slot: () => Promise<AsyncIterator<String>>;
 }
 
+export interface ScheduleSlotSubscriptionPayload {
+  mutation: MutationType;
+  node: ScheduleSlot;
+  updatedFields: String[];
+  previousValues: ScheduleSlotPreviousValues;
+}
+
+export interface ScheduleSlotSubscriptionPayloadPromise
+  extends Promise<ScheduleSlotSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ScheduleSlotPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ScheduleSlotPreviousValuesPromise>() => T;
+}
+
+export interface ScheduleSlotSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ScheduleSlotSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ScheduleSlotSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ScheduleSlotPreviousValuesSubscription>() => T;
+}
+
+export interface ScheduleSlotPreviousValues {
+  id: ID_Output;
+  start: String;
+  end: String;
+  center?: String;
+  duration?: Int;
+  slot: String;
+}
+
+export interface ScheduleSlotPreviousValuesPromise
+  extends Promise<ScheduleSlotPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  start: () => Promise<String>;
+  end: () => Promise<String>;
+  center: () => Promise<String>;
+  duration: () => Promise<Int>;
+  slot: () => Promise<String>;
+}
+
+export interface ScheduleSlotPreviousValuesSubscription
+  extends Promise<AsyncIterator<ScheduleSlotPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  start: () => Promise<AsyncIterator<String>>;
+  end: () => Promise<AsyncIterator<String>>;
+  center: () => Promise<AsyncIterator<String>>;
+  duration: () => Promise<AsyncIterator<Int>>;
+  slot: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -1624,6 +1999,10 @@ export const models: Model[] = [
   },
   {
     name: "Intervention",
+    embedded: false
+  },
+  {
+    name: "ScheduleSlot",
     embedded: false
   }
 ];

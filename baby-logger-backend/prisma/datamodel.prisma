@@ -41,3 +41,13 @@ type Intervention {
   napEvent: NapEvent!
   severity: Severity
 }
+
+type ScheduleSlot {
+  id: ID! @id
+  start: String! @unique
+  end: String! @unique
+  center: String @unique
+  duration: Int
+  slot: String!
+  baby: Baby!
+}

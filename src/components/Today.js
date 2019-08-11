@@ -59,6 +59,7 @@ export const NAPEVENTS_QUERY = gql`
       end
       status
       duration
+      slot
     }
   }
 `

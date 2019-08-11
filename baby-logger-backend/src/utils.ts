@@ -33,13 +33,17 @@ interface Acc {
 export function assignSlot(start: string, schedule: ScheduleSlot[]): Slot {
   
   // find least distance to a schedule slot
+  const startTimestamp = moment(start).valueOf();
+  const startDayString = moment(start).format('DD-MM-YYYY');
+
   const acc: Acc = schedule.reduce((acc, slot) => {
-    const slotTimestamp = moment(slot.start).valueOf();
-    const startTimestamp = moment(start).valueOf();
+    const slotTimestamp = moment(`
+      ${startDayString}-${moment(slot.start).format("HH:mm:ss")}
+      `, 'DD-MM-YYYY-HH:mm:ss'
+      ).valueOf();
     const difference = Math.abs(slotTimestamp - startTimestamp);
 
-    return difference < acc.timeDiff ? {timeDiff: slotTimestamp, slot: slot.slot} : acc; // return the lowest value as new accumulator
+    return difference < acc.timeDiff ? {timeDiff: difference, slot: slot.slot} : acc; // return the lowest value as new accumulator
   }, {timeDiff: 9999999999999, slot: undefined})
-
   return acc.slot
 }

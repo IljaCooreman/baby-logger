@@ -14,6 +14,10 @@ type AggregateNapEvent {
   count: Int!
 }
 
+type AggregateScheduleSlot {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -41,6 +45,11 @@ input BabyCreateInput {
 input BabyCreateManyWithoutParentInput {
   create: [BabyCreateWithoutParentInput!]
   connect: [BabyWhereUniqueInput!]
+}
+
+input BabyCreateOneInput {
+  create: BabyCreateInput
+  connect: BabyWhereUniqueInput
 }
 
 input BabyCreateOneWithoutNapEventsInput {
@@ -129,6 +138,12 @@ input BabySubscriptionWhereInput {
   NOT: [BabySubscriptionWhereInput!]
 }
 
+input BabyUpdateDataInput {
+  name: String
+  napEvents: NapEventUpdateManyWithoutBabyInput
+  parent: UserUpdateOneRequiredWithoutBabiesInput
+}
+
 input BabyUpdateInput {
   name: String
   napEvents: NapEventUpdateManyWithoutBabyInput
@@ -160,6 +175,13 @@ input BabyUpdateManyWithWhereNestedInput {
   data: BabyUpdateManyDataInput!
 }
 
+input BabyUpdateOneRequiredInput {
+  create: BabyCreateInput
+  update: BabyUpdateDataInput
+  upsert: BabyUpsertNestedInput
+  connect: BabyWhereUniqueInput
+}
+
 input BabyUpdateOneRequiredWithoutNapEventsInput {
   create: BabyCreateWithoutNapEventsInput
   update: BabyUpdateWithoutNapEventsDataInput
@@ -180,6 +202,11 @@ input BabyUpdateWithoutParentDataInput {
 input BabyUpdateWithWhereUniqueWithoutParentInput {
   where: BabyWhereUniqueInput!
   data: BabyUpdateWithoutParentDataInput!
+}
+
+input BabyUpsertNestedInput {
+  update: BabyUpdateDataInput!
+  create: BabyCreateInput!
 }
 
 input BabyUpsertWithoutNapEventsInput {
@@ -373,6 +400,12 @@ type Mutation {
   upsertNapEvent(where: NapEventWhereUniqueInput!, create: NapEventCreateInput!, update: NapEventUpdateInput!): NapEvent!
   deleteNapEvent(where: NapEventWhereUniqueInput!): NapEvent
   deleteManyNapEvents(where: NapEventWhereInput): BatchPayload!
+  createScheduleSlot(data: ScheduleSlotCreateInput!): ScheduleSlot!
+  updateScheduleSlot(data: ScheduleSlotUpdateInput!, where: ScheduleSlotWhereUniqueInput!): ScheduleSlot
+  updateManyScheduleSlots(data: ScheduleSlotUpdateManyMutationInput!, where: ScheduleSlotWhereInput): BatchPayload!
+  upsertScheduleSlot(where: ScheduleSlotWhereUniqueInput!, create: ScheduleSlotCreateInput!, update: ScheduleSlotUpdateInput!): ScheduleSlot!
+  deleteScheduleSlot(where: ScheduleSlotWhereUniqueInput!): ScheduleSlot
+  deleteManyScheduleSlots(where: ScheduleSlotWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -710,10 +743,195 @@ type Query {
   napEvent(where: NapEventWhereUniqueInput!): NapEvent
   napEvents(where: NapEventWhereInput, orderBy: NapEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NapEvent]!
   napEventsConnection(where: NapEventWhereInput, orderBy: NapEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NapEventConnection!
+  scheduleSlot(where: ScheduleSlotWhereUniqueInput!): ScheduleSlot
+  scheduleSlots(where: ScheduleSlotWhereInput, orderBy: ScheduleSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ScheduleSlot]!
+  scheduleSlotsConnection(where: ScheduleSlotWhereInput, orderBy: ScheduleSlotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ScheduleSlotConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
+}
+
+type ScheduleSlot {
+  id: ID!
+  start: String!
+  end: String!
+  center: String
+  duration: Int
+  slot: String!
+  baby: Baby!
+}
+
+type ScheduleSlotConnection {
+  pageInfo: PageInfo!
+  edges: [ScheduleSlotEdge]!
+  aggregate: AggregateScheduleSlot!
+}
+
+input ScheduleSlotCreateInput {
+  id: ID
+  start: String!
+  end: String!
+  center: String
+  duration: Int
+  slot: String!
+  baby: BabyCreateOneInput!
+}
+
+type ScheduleSlotEdge {
+  node: ScheduleSlot!
+  cursor: String!
+}
+
+enum ScheduleSlotOrderByInput {
+  id_ASC
+  id_DESC
+  start_ASC
+  start_DESC
+  end_ASC
+  end_DESC
+  center_ASC
+  center_DESC
+  duration_ASC
+  duration_DESC
+  slot_ASC
+  slot_DESC
+}
+
+type ScheduleSlotPreviousValues {
+  id: ID!
+  start: String!
+  end: String!
+  center: String
+  duration: Int
+  slot: String!
+}
+
+type ScheduleSlotSubscriptionPayload {
+  mutation: MutationType!
+  node: ScheduleSlot
+  updatedFields: [String!]
+  previousValues: ScheduleSlotPreviousValues
+}
+
+input ScheduleSlotSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ScheduleSlotWhereInput
+  AND: [ScheduleSlotSubscriptionWhereInput!]
+  OR: [ScheduleSlotSubscriptionWhereInput!]
+  NOT: [ScheduleSlotSubscriptionWhereInput!]
+}
+
+input ScheduleSlotUpdateInput {
+  start: String
+  end: String
+  center: String
+  duration: Int
+  slot: String
+  baby: BabyUpdateOneRequiredInput
+}
+
+input ScheduleSlotUpdateManyMutationInput {
+  start: String
+  end: String
+  center: String
+  duration: Int
+  slot: String
+}
+
+input ScheduleSlotWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  start: String
+  start_not: String
+  start_in: [String!]
+  start_not_in: [String!]
+  start_lt: String
+  start_lte: String
+  start_gt: String
+  start_gte: String
+  start_contains: String
+  start_not_contains: String
+  start_starts_with: String
+  start_not_starts_with: String
+  start_ends_with: String
+  start_not_ends_with: String
+  end: String
+  end_not: String
+  end_in: [String!]
+  end_not_in: [String!]
+  end_lt: String
+  end_lte: String
+  end_gt: String
+  end_gte: String
+  end_contains: String
+  end_not_contains: String
+  end_starts_with: String
+  end_not_starts_with: String
+  end_ends_with: String
+  end_not_ends_with: String
+  center: String
+  center_not: String
+  center_in: [String!]
+  center_not_in: [String!]
+  center_lt: String
+  center_lte: String
+  center_gt: String
+  center_gte: String
+  center_contains: String
+  center_not_contains: String
+  center_starts_with: String
+  center_not_starts_with: String
+  center_ends_with: String
+  center_not_ends_with: String
+  duration: Int
+  duration_not: Int
+  duration_in: [Int!]
+  duration_not_in: [Int!]
+  duration_lt: Int
+  duration_lte: Int
+  duration_gt: Int
+  duration_gte: Int
+  slot: String
+  slot_not: String
+  slot_in: [String!]
+  slot_not_in: [String!]
+  slot_lt: String
+  slot_lte: String
+  slot_gt: String
+  slot_gte: String
+  slot_contains: String
+  slot_not_contains: String
+  slot_starts_with: String
+  slot_not_starts_with: String
+  slot_ends_with: String
+  slot_not_ends_with: String
+  baby: BabyWhereInput
+  AND: [ScheduleSlotWhereInput!]
+  OR: [ScheduleSlotWhereInput!]
+  NOT: [ScheduleSlotWhereInput!]
+}
+
+input ScheduleSlotWhereUniqueInput {
+  id: ID
+  start: String
+  end: String
+  center: String
 }
 
 enum Severity {
@@ -732,6 +950,7 @@ type Subscription {
   baby(where: BabySubscriptionWhereInput): BabySubscriptionPayload
   intervention(where: InterventionSubscriptionWhereInput): InterventionSubscriptionPayload
   napEvent(where: NapEventSubscriptionWhereInput): NapEventSubscriptionPayload
+  scheduleSlot(where: ScheduleSlotSubscriptionWhereInput): ScheduleSlotSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
