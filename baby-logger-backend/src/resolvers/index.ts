@@ -1,6 +1,7 @@
 import { Baby } from './Baby';
 import { auth } from './Mutation/auth';
 import { interventions } from './Mutation/interventions';
+import { scheduleSlots } from './Mutation/scheduleSlots';
 import { napEvents } from './Mutation/napEvents';
 import { NapEvent } from './NapEvent';
 import { Query } from './Query';
@@ -11,7 +12,8 @@ export default {
   Mutation: {
     ...auth,
     ...napEvents,
-    ...interventions
+    ...interventions,
+    ...scheduleSlots,
   },
   User,
   Baby,

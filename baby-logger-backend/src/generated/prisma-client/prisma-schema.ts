@@ -929,9 +929,6 @@ input ScheduleSlotWhereInput {
 
 input ScheduleSlotWhereUniqueInput {
   id: ID
-  start: String
-  end: String
-  center: String
 }
 
 enum Severity {

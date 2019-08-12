@@ -14,6 +14,8 @@ type Mutation {
   updateNapEvent(id: ID!, start: String, end: String): NapEvent!
   deleteNapEvent(id: ID!): NapEvent!
   recalculateSlots: NapEvent
+  createScheduleSlot: ScheduleSlot!
+  createSchedule(babyId: ID!): ScheduleSlot!
 }
 
 

@@ -44,9 +44,9 @@ type Intervention {
 
 type ScheduleSlot {
   id: ID! @id
-  start: String! @unique
-  end: String! @unique
-  center: String @unique
+  start: String!
+  end: String!
+  center: String
   duration: Int
   slot: String!
   baby: Baby!

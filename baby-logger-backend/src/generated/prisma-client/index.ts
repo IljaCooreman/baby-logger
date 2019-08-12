@@ -547,9 +547,6 @@ export type NapEventWhereUniqueInput = AtLeastOne<{
 
 export type ScheduleSlotWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  start?: Maybe<String>;
-  end?: Maybe<String>;
-  center?: Maybe<String>;
 }>;
 
 export interface ScheduleSlotWhereInput {
