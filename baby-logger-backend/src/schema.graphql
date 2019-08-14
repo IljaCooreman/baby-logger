@@ -13,8 +13,8 @@ type Mutation {
   toggleNap(babyId: ID!, timestamp: String): NapEvent!
   updateNapEvent(id: ID!, start: String, end: String): NapEvent!
   deleteNapEvent(id: ID!): NapEvent!
-  recalculateSlots: NapEvent
-  createScheduleSlot: ScheduleSlot!
+  recalculateSlots(babyId: ID!): NapEvent
+  createScheduleSlot(start: String!, end: String, babyId: ID!, slotName: String!): ScheduleSlot!
   createSchedule(babyId: ID!): ScheduleSlot!
 }
 

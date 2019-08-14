@@ -1,6 +1,8 @@
-import * as jwt from 'jsonwebtoken'
-import { Prisma } from './generated/prisma-client'
-import {ScheduleSlot, Slot} from './schedule'
+import * as jwt from 'jsonwebtoken';
+
+import { Prisma } from './generated/prisma-client';
+import { ScheduleSlot, Slot } from './schedule';
+
 import moment = require('moment');
 
 export interface Context {
@@ -25,27 +27,43 @@ export class AuthError extends Error {
   }
 }
 
-interface Acc {
-  timeDiff: number,
-  slot: Slot
+
+
+export function assignSlot(napStart: string, schedule: ScheduleSlot[], end: string, ): Slot {
+  const startBasedSlot = convertTimeToSlot(
+    moment(napStart),
+    schedule
+  );
+
+  return startBasedSlot.slot;
+
 }
 
-export function assignSlot(start: string, schedule: ScheduleSlot[]): Slot {
-  
+interface Acc {
+  timeDiff: number,
+  slot: ScheduleSlot
+}
+
+const convertTimeToSlot = (napStart: moment.Moment, schedule: ScheduleSlot[]): ScheduleSlot => {
   // find least distance to a schedule slot
-  const startTimestamp = moment(start).valueOf();
-  const startDayString = moment(start).format('DD-MM-YYYY');
+  const napStartTimestamp = napStart.valueOf();
 
-  
-  const acc: Acc = schedule.reduce((acc, slot) => {
+  const reduceResult: Acc = schedule.reduce((acc, slot: ScheduleSlot): Acc => {
 
-    const slotTimestamp = moment(`
-      ${startDayString}-${slot.start}
-      `, 'DD-MM-YYYY-HH:mm:ss'
-      ).valueOf();
-    const difference = Math.abs(slotTimestamp - startTimestamp);
+    const slotStartTimestamp = combineTimeAndDay(napStart, slot.start).valueOf();
+    const difference = Math.abs(slotStartTimestamp - napStartTimestamp);
+    console.log(slot.slot, difference / 10000, acc.timeDiff, acc.slot ? acc.slot.slot : null)
 
-    return difference < acc.timeDiff ? {timeDiff: difference, slot: slot.slot} : acc; // return the lowest value as new accumulator
-  }, {timeDiff: 9999999999999, slot: undefined})
-  return acc.slot
+    return difference < acc.timeDiff ? ({ timeDiff: difference, slot }) : acc; // return the lowest value as new accumulator
+  }, { timeDiff: 9999999999999, slot: undefined });
+
+  return reduceResult.slot;
+}
+
+const combineTimeAndDay = (day: string | moment.Moment, time: string): moment.Moment => {
+  const startDayString = moment(day).format('DD-MM-YYYY');
+  return moment(
+    `${startDayString}-${time}`,
+    'DD-MM-YYYY-HH:mm:ss'
+  )
 }

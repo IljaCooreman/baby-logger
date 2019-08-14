@@ -1,10 +1,10 @@
 
 
 import { NapEvent } from '../../generated/prisma-client';
-import { Context, assignSlot } from '../../utils';
+import { schedule } from '../../schedule';
+import { assignSlot, Context } from '../../utils';
 
 import moment = require('moment');
-import { schedule } from '../../schedule';
 export enum Status {
   complete = "COMPLETE",
   ongoing = "ONGOING",
@@ -19,6 +19,7 @@ const isSpamCheck = (napEvent, now, minSpamTime = 2000): Boolean => {
 
 const createNapEvent = async (ctx, babyId: string, start?: string, end?: string, status?: Status): Promise<NapEvent> => {
   const localStart = start || new Date().toISOString();
+  const schedule = await ctx.prisma.scheduleSlots({ where: { baby: { id: babyId } } });
 
   return await ctx.prisma.createNapEvent({
     baby: { connect: { id: babyId } },
@@ -98,15 +99,15 @@ export const napEvents = {
 
     return nap
   },
-  
-  async updateNapEvent(parent, {id, start, end}, ctx: Context): Promise<NapEvent> {
+
+  async updateNapEvent(parent, { id, start, end }, ctx: Context): Promise<NapEvent> {
     return await ctx.prisma.updateNapEvent({
-      where: {id},
-      data: {start, end}
+      where: { id },
+      data: { start, end }
     })
   },
 
-  async deleteNapEvent(parent, {id}, ctx: Context): Promise<NapEvent> {
+  async deleteNapEvent(parent, { id }, ctx: Context): Promise<NapEvent> {
     return await ctx.prisma.deleteNapEvent({
       id,
     })
@@ -117,8 +118,8 @@ export const napEvents = {
     for (let i = 0; i < napEvents.length; i++) {
       const napEvent = napEvents[i];
       const updatedEvent = await ctx.prisma.updateNapEvent({
-        where: {id: napEvent.id},
-        data: {slot: assignSlot(napEvent.start, schedule)}
+        where: { id: napEvent.id },
+        data: { slot: assignSlot(napEvent.start, schedule) }
       })
       console.log('event updated', updatedEvent);
     }
