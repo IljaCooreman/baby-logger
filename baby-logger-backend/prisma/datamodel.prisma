@@ -25,6 +25,12 @@ enum Severity {
   HEAVY
 }
 
+enum Mood {
+  SLEEPY
+  PLAYFUL
+  SAD
+}
+
 type NapEvent {
   id: ID! @id
   start: String! @unique
@@ -32,6 +38,8 @@ type NapEvent {
   status: Status!
   baby: Baby!
   slot: String
+  mood: Mood
+  description: String
 }
 
 
