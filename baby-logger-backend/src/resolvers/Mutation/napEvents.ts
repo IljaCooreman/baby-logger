@@ -26,7 +26,8 @@ const createNapEvent = async (ctx, babyId: string, start?: string, end?: string,
     status: status || end ? Status.complete : Status.ongoing,
     start: localStart,
     end,
-    slot: assignSlot(localStart, schedule)
+    slot: assignSlot(localStart, schedule),
+    mood: "UNDEFINED"
   })
 }
 
@@ -100,10 +101,10 @@ export const napEvents = {
     return nap
   },
 
-  async updateNapEvent(parent, { id, start, end }, ctx: Context): Promise<NapEvent> {
+  async updateNapEvent(parent, { id, start, end, mood, description, slot, status }, ctx: Context): Promise<NapEvent> {
     return await ctx.prisma.updateNapEvent({
       where: { id },
-      data: { start, end }
+      data: { start, end, description, status, mood, slot }
     })
   },
 

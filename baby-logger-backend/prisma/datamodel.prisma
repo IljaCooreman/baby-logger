@@ -29,6 +29,7 @@ enum Mood {
   SLEEPY
   PLAYFUL
   SAD
+  UNDEFINED
 }
 
 type NapEvent {

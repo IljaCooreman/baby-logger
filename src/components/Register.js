@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
 import ToggleNap from './ToggleNap';
 import AddNapEvent from './AddNapEvent';
 
@@ -10,7 +10,7 @@ const Register = () => {
             <AddNapEvent />
         </Fragment>
     )
-    
+
 }
 
 export default Register

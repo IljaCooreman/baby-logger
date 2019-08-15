@@ -11,11 +11,18 @@ type Mutation {
   endNap(babyId: ID!, end: String, napId: ID): NapEvent!
   createIntervention(babyId: ID!, severity: Severity): Intervention!
   toggleNap(babyId: ID!, timestamp: String): NapEvent!
-  updateNapEvent(id: ID!, start: String, end: String): NapEvent!
+  updateNapEvent(id: ID!, start: String, end: String, mood: Mood, description: String, slot: String, status: Status): NapEvent!
   deleteNapEvent(id: ID!): NapEvent!
   recalculateSlots(babyId: ID!): NapEvent
   createScheduleSlot(start: String!, end: String, babyId: ID!, slotName: String!): ScheduleSlot!
   createSchedule(babyId: ID!): ScheduleSlot!
+}
+
+enum Mood {
+  SLEEPY
+  PLAYFUL
+  SAD
+  UNDEFINED
 }
 
 
@@ -53,6 +60,7 @@ type NapEvent {
   baby: Baby!
   duration: Int
   slot: String
+  mood: Mood
 }
 
 enum Severity {

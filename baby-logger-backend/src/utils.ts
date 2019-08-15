@@ -29,7 +29,7 @@ export class AuthError extends Error {
 
 
 
-export function assignSlot(napStart: string, schedule: ScheduleSlot[], end: string, ): Slot {
+export function assignSlot(napStart: string, schedule: ScheduleSlot[], end?: string, ): Slot {
   const startBasedSlot = convertTimeToSlot(
     moment(napStart),
     schedule
