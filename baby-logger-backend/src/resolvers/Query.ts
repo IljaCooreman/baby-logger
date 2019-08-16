@@ -6,11 +6,15 @@ export const Query = {
   },
 
   napEvents(parent, { babyId, last, before, after }, ctx: Context) {
-    return ctx.prisma.napEvents({ where: { 
-      baby: { id: babyId },
-      start_gte: after,
-      end_lte: before,
-    }, last })
+    return ctx.prisma.napEvents({
+      where: {
+        baby: { id: babyId },
+        start_gte: after,
+        end_lte: before,
+      },
+      last,
+      orderBy: "start_ASC"
+    })
   },
 
 

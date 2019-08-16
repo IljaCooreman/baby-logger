@@ -1,6 +1,6 @@
 type Query {
   babies: [Baby!]
-  napEvents(babyId: ID!, last: Int, before: String, after: String): [NapEvent]
+  napEvents(babyId: ID!, last: Int, before: String, after: String, orderBy: String): [NapEvent]
   me: User
 }
 

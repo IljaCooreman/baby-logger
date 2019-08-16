@@ -1,8 +1,7 @@
 /** @jsx jsx */
-import {useState} from 'react'
 import { gql } from 'apollo-boost'
 import { useMutation } from '@apollo/react-hooks';
-import {css, jsx} from '@emotion/core'
+import { css, jsx } from '@emotion/core'
 import { Modal } from 'antd';
 
 const { confirm } = Modal;
@@ -24,13 +23,11 @@ color: #FF391E;
 `;
 
 
-const DeleteNapEvent = ({id, refetch}) => {
-  const [setRequestComplete] = useState(true)
-  const [deleteNapEvent, { loading, error }] = useMutation(DELETE_NAP_EVENT, 
+const DeleteNapEvent = ({ id, refetch }) => {
+  const [deleteNapEvent, { loading, error }] = useMutation(DELETE_NAP_EVENT,
     {
       onCompleted() {
-          setRequestComplete(true);
-          refetch();
+        refetch();
       }
     }
   );
@@ -54,15 +51,17 @@ const DeleteNapEvent = ({id, refetch}) => {
       okType: 'danger',
       cancelText: 'Nee',
       onOk() {
-        deleteNapEvent({variables: {
+        deleteNapEvent({
+          variables: {
             id
-        }})
+          }
+        })
       }
     });
   }
 
   return (
-      <div css={deleteLinkStyle} onClick={showDeleteConfirm}>Verwijder dutje</div>
+    <div css={deleteLinkStyle} onClick={showDeleteConfirm}>Verwijder dutje</div>
   )
 }
 
