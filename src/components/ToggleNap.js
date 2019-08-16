@@ -1,13 +1,11 @@
 /** @jsx jsx */
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { gql } from 'apollo-boost'
 import { BABY_ID } from '../constants/variables';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { css, jsx } from '@emotion/core'
 import MoodSelector from './MoodSelector';
-import moment from 'moment';
-import { secondsToHoursMinutes } from '../helpers/secondsToHoursMinutes';
 
 const buttonStyle = (active, loading) => css`
   padding: 30px 20px; 
@@ -40,11 +38,24 @@ margin: 16px;
 
 
 const ToggleNapWrapper = () => {
-  const { loading, error, data, called } = useQuery(STATUS_QUERY,
+  const { loading, error, data, refetch, startPolling, stopPolling } = useQuery(STATUS_QUERY,
     {
       variables: { babyId: BABY_ID },
       fetchPolicy: 'network-only',
     });
+  if (document.hasFocus()) {
+    startPolling(4000);
+  }
+
+  window.onfocus = () => {
+    refetch();
+    startPolling(4000);
+  };
+
+  window.onblur = () => {
+    stopPolling();
+  };
+
 
   if (loading) {
     return (
@@ -93,6 +104,12 @@ const ToggleNap = ({ status, id, mood, baby: { name: babyName } }) => {
       }
     }
   );
+
+  useMemo(() => setNapState({
+    status, mood, lastNapId: id
+  }),
+    [status, mood, id]
+  )
 
   const setMood = (mood) => {
     setNapState({

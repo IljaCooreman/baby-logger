@@ -1,10 +1,11 @@
 /** @jsx jsx */
 
-import {useState} from 'react'
-import {css, jsx} from '@emotion/core'
+import { useState } from 'react'
+import { css, jsx } from '@emotion/core'
 import moment from 'moment'
 import { calcTotalSleepingTime } from '../helpers/calcTotalSleepingTime';
 import EventListContainer from './EventListContainer';
+import { moodColors } from '../constants/variables';
 
 const containerStyle = css`
     border-radius: 14px;
@@ -14,8 +15,8 @@ const containerStyle = css`
     margin: 25px 0;
     color: #536ECD;
     `;
-    
-    const barStyle = css`
+
+const barStyle = css`
     position: relative;
     height: 14px;
     color: grey;
@@ -25,14 +26,14 @@ const containerStyle = css`
     margin: 6px 0;
 `;
 
-const eventStyle = (start, end, status) => {
-
+const eventStyle = (start, end, status, mood) => {
     return css`
         position: absolute;
         left: ${start > 0 ? start : 0}%;
         right: ${end < 100 ? 100 - end : 0}%;
         background: ${status === "ONGOING" ? '#FF8A1E' : '#5175F1'};
         height: 100%;
+        border-bottom: ${moodColors[mood] ? 2 : 0}px solid ${moodColors[mood]};
         `;
 }
 
@@ -50,25 +51,25 @@ const calcEventsDayPercentage = (events, date) => {
     })
 }
 
-const DayOverviewGraph = ({events, date, refetch}) => {
+const DayOverviewGraph = ({ events, date, refetch }) => {
 
     const [isVisible, setisVisible] = useState(false)
     const totalSleepingTime = calcTotalSleepingTime(events);
 
     return (
-        <div css={containerStyle}  onClick={() => setisVisible(!isVisible)}>
+        <div css={containerStyle} onClick={() => setisVisible(!isVisible)}>
             {moment(date).format('dddd DD/MM')}
             <div css={barStyle}>
                 {
-                   calcEventsDayPercentage(events, date).map(event => {
-                    return (
-                        <div key={event.id} css={eventStyle(event.start, event.end, event.status )} />
-                    )
-                   })
+                    calcEventsDayPercentage(events, date).map(event => {
+                        return (
+                            <div key={event.id} css={eventStyle(event.start, event.end, event.status, event.mood)} />
+                        )
+                    })
                 }
             </div>
-            <div style={{textAlign: "right"}}>
-            {Math.floor(totalSleepingTime.hours)}h {totalSleepingTime.minutes}m
+            <div style={{ textAlign: "right" }}>
+                {Math.floor(totalSleepingTime.hours)}h {totalSleepingTime.minutes}m
             </div>
             <EventListContainer isVisible={isVisible} events={events} refetch={refetch} />
         </div>

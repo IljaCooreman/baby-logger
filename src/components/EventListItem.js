@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import {css, jsx} from '@emotion/core'
+import { css, jsx } from '@emotion/core'
 import moment from 'moment'
 import { Button } from 'antd';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ const containerStyle = (status) => css`
     font-size: 12px;
     `;
 
-    const containerEditStyle = css`
+const containerEditStyle = css`
     position: relative;
     border-radius: 6px;
     background-color: #E1E7FD;
@@ -32,14 +32,14 @@ const containerStyle = (status) => css`
     justify-content: space-around;
     `;
 
-    const closeButtonStyle = css`
+const closeButtonStyle = css`
         position: absolute;
         top: 8px;
         right: 8px;
     `
 
 
-const EventListItem = ({event, refetch}) => {
+const EventListItem = ({ event, refetch }) => {
     const [isEditing, setIsEditing] = useState(false);
     const duration = secondsToHoursMinutes(event.duration);
     if (isEditing) return (
@@ -47,16 +47,16 @@ const EventListItem = ({event, refetch}) => {
             <UpdateNapEvent {...event} />
             <DeleteNapEvent {...event} refetch={refetch} />
 
-            <Button 
-            css={closeButtonStyle}
-            shape="circle" 
-            icon="close"
-            onClick={
-                (e) => {
-                    e.preventDefault(); 
-                    setIsEditing(false)
-                }
-            } />
+            <Button
+                css={closeButtonStyle}
+                shape="circle"
+                icon="close"
+                onClick={
+                    (e) => {
+                        e.preventDefault();
+                        setIsEditing(false)
+                    }
+                } />
         </div>
     );
     return (
@@ -65,25 +65,25 @@ const EventListItem = ({event, refetch}) => {
                 <div css={css`
                     font-weight: bold;
                     text-transform: capitalize;
-                    justify-center: "center";
+                    justify-content: center;
                     `}>{event.slot}</div>
                 <div>
-                <div>
-                    {moment(event.start).format("HH:mm")} - {event.end ? moment(event.end).format("HH:mm") : "nu"}
+                    <div>
+                        {moment(event.start).format("HH:mm")} - {event.end ? moment(event.end).format("HH:mm") : "nu"}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div css={css`display: flex; flex-flow: column;`}>
-            <div style={{
-                fontWeight: "bold",
-                fontSize: "16px",
-            }}>
-                {duration.hours > 0 && `${duration.hours}u`} {duration.minutes}m
+            <div css={css`display: flex; flex-flow: column;`}>
+                <div style={{
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                }}>
+                    {duration.hours > 0 && `${duration.hours}u`} {duration.minutes}m
             </div>
-        </div>
-             <Button onClick={
+            </div>
+            <Button onClick={
                 (e) => {
-                    e.preventDefault(); 
+                    e.preventDefault();
                     setIsEditing(true);
                 }}>Edit</Button>
         </div>
