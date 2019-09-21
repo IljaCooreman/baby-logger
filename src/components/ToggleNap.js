@@ -6,6 +6,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { css, jsx } from '@emotion/core'
 import MoodSelector from './MoodSelector';
+import TimingIndicator from './TimingIndicator';
 
 const buttonStyle = (active, loading) => css`
   padding: 30px 20px; 
@@ -90,7 +91,7 @@ const ToggleNapWrapper = () => {
 }
 
 
-const ToggleNap = ({ status, id, mood, baby: { name: babyName } }) => {
+const ToggleNap = ({ status, id, mood, baby: { name: babyName }, start, end }) => {
   const [napState, setNapState] = useState({ status, mood, lastNapId: id });
   const [toggleNap, { loading: mutationLoading, error: mutationError }] = useMutation(TOGGLE_NAP_QUERY,
     {
@@ -128,21 +129,15 @@ const ToggleNap = ({ status, id, mood, baby: { name: babyName } }) => {
   const isOngoing = napState.status === "ONGOING";
   const buttonText = isOngoing ? "stop nap" : "start nap";
 
-  // const timeSleeping = secondsToHoursMinutes(moment().diff(moment(start), 'seconds'));
-  // const timeAwake = secondsToHoursMinutes(moment(end).diff(moment(start), 'seconds'));
   return (
     <div css={containerStyle}>
       <div css={subtextStyle}>{isOngoing ? `${babyName} doet nu een dutje` : `${babyName} is wakker`}</div>
-      {/* {
-        isOngoing ? <div>{timeSleeping.hours}u {timeSleeping.minutes}m aan het slapen</div> :
-          <div>{timeAwake.hours}u {timeAwake.minutes}m wakker</div>
-      } */}
       <div css={buttonStyle(isOngoing, mutationLoading)} onClick={handleClick}>
         {mutationLoading && "Loading"}
         {mutationError && mutationError.message}
         {!mutationLoading && !mutationError && buttonText}
       </div>
-
+      <TimingIndicator start={start} end={end} isOngoing={isOngoing} />
       {
         <MoodSelector id={napState.lastNapId} name={babyName} mood={napState.mood} isOngoing={isOngoing} setMood={setMood} />
       }
