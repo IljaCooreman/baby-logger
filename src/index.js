@@ -30,32 +30,23 @@ ReactDOM.render(
             to="/"
             title="Feed"
           >
-            Overzicht
+            Registreer
           </Link>
-          {/* <NavLink
+          <NavLink
             className="link dim f6 f5-ns dib mr3 white"
             activeClassName="gray"
             exact={true}
             to="/history"
             title="Feed"
           >
-            Historiek
-          </NavLink> */}
-          <NavLink
-            className="link dim f6 f5-ns dib mr3 white"
-            activeClassName="gray"
-            exact={true}
-            to="/event-register"
-            title="Feed"
-          >
-            Registreer
+            Overzicht
           </NavLink>
         </nav>
         <div className="fl w-100 pl4 pr4">
           <Switch>
-            <Route exact path="/" component={Today} />
+            <Route exact path="/" component={Register} />
             <Route path="/history" component={Today} />
-            <Route path="/event-register" component={Register} />
+            {/* <Route path="/event-register" component={Register} /> */}
           </Switch>
         </div>
       </Fragment>

@@ -92,7 +92,7 @@ const ToggleNapWrapper = () => {
 
 const ToggleNap = ({ status, id, mood, baby: { name: babyName } }) => {
   const [napState, setNapState] = useState({ status, mood, lastNapId: id });
-  const [toggleNap, { loading: mutationLoading, error: mutationError, called: mutationCalled }] = useMutation(TOGGLE_NAP_QUERY,
+  const [toggleNap, { loading: mutationLoading, error: mutationError }] = useMutation(TOGGLE_NAP_QUERY,
     {
       onCompleted({ toggleNap }) {
         const { status, id, mood } = toggleNap;
