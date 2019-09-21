@@ -4,7 +4,7 @@ import moment from 'moment';
 
 const TimingIndicator = ({ start, end, isOngoing }) => {
   const timeSleeping = secondsToHoursMinutes(moment().diff(moment(start), 'seconds'));
-  const timeAwake = secondsToHoursMinutes(moment(end).diff(moment(), 'seconds'));
+  const timeAwake = secondsToHoursMinutes(moment().diff(moment(end), 'seconds'));
   return isOngoing ? <div>{timeSleeping.hours}u {timeSleeping.minutes}m aan het slapen</div> :
     <div>{timeAwake.hours}u {timeAwake.minutes}m wakker</div>
 }
