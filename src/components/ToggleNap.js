@@ -137,7 +137,7 @@ const ToggleNap = ({ status, id, mood, baby: { name: babyName }, start, end }) =
         {mutationError && mutationError.message}
         {!mutationLoading && !mutationError && buttonText}
       </div>
-      <TimingIndicator start={start} end={end} isOngoing={isOngoing} />
+      <TimingIndicator pointInTime={isOngoing ? start : end} isOngoing={isOngoing} />
       {
         <MoodSelector id={napState.lastNapId} name={babyName} mood={napState.mood} isOngoing={isOngoing} setMood={setMood} />
       }
